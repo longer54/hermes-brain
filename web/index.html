@@ -517,7 +517,7 @@ function upd(){const h=document.documentElement;$('sidebtn').textContent=(mob()?
 async function api(p,b){const r=await fetch(p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'serwer: '+r.status);return j}
 const dzis=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const dniOd=(a,b)=>Math.round((+new Date(a+'T12:00')-+new Date(b+'T12:00'))/864e5);
-function dzien(iso,d0){if(!iso)return'';const n=dniOd(iso,d0);if(n==0)return'Dziś';if(n==1)return'Jutro';if(n==2)return'Pojutrze';if(n<0)return(-n)+' dni po terminie';return new Date(iso+'T12:00').toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'})}
+function dzien(iso,d0){if(!iso)return'';const n=dniOd(iso,d0);if(n==0)return'Dziś';if(n==1)return'Jutro';if(n==2)return'Pojutrze';if(n==-1)return'1 dzień po terminie';if(n<0)return(-n)+' dni po terminie';return new Date(iso+'T12:00').toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'})}
 const linki=s=>esc(s).replace(/(https?:\/\/[^\s<]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u.length>40?u.slice(0,38)+'…':u}</a>`);
 const PRIO=[['1','cito','Cito','#ef4444'],['2','wysoki','Wysoki','#f59e0b'],['3','sredni','Średni','#d4af37'],['4','niski','Niski','#4da3ff'],['5','czeka','Najniższy / czeka','#8a8a8a'],['/','wtoku','W toku','#22c55e'],[' ','','Bez priorytetu','#9fd68a']];
 const kolSt=s=>(PRIO.find(p=>p[1]==s||p[0]==s)||PRIO[6])[3];
