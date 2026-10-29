@@ -1,0 +1,23 @@
+{
+ "spotkania": [
+  {
+   "nazwa": "Planowanie Latarni",
+   "data": "{d-2}",
+   "plik": "demo",
+   "zadania": [
+    {
+     "tekst": "Dodać tryb ciemny",
+     "zrobione": true,
+     "nr": 1,
+     "linia": ""
+    },
+    {
+     "tekst": "Spiąć formularz kontaktowy",
+     "zrobione": false,
+     "nr": 2,
+     "linia": ""
+    }
+   ]
+  }
+ ]
+}

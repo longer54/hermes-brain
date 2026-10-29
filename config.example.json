@@ -1,0 +1,39 @@
+{
+  "hermes_home": "~/.hermes",
+  "vault": "~/Obsidian/Vault",
+  "host": "127.0.0.1",
+  "port": 8110,
+  "backend": "",
+  "agents": {
+    "": "Hermes",
+    "research": "Research"
+  },
+  "private_folders": [
+    "Dziennik"
+  ],
+  "services": [
+    {
+      "id": "x_github",
+      "label": "GitHub",
+      "match": "github\\.com|\\bgh "
+    },
+    {
+      "id": "x_youtube",
+      "label": "YouTube",
+      "match": "yt-dlp|youtube"
+    },
+    {
+      "id": "x_ha",
+      "label": "Home Assistant",
+      "match": "homeassistant|:8123",
+      "local": true
+    }
+  ],
+  "hosts": [
+    {
+      "id": "x_server",
+      "label": "Mój serwer",
+      "match": "\\bmy-server\\b"
+    }
+  ]
+}

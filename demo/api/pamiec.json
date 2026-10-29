@@ -1,0 +1,17 @@
+{
+ "pozycje": [
+  {
+   "tekst": "Sprawdzić gwarancję słuchawek",
+   "plik": "demo",
+   "nr": 1,
+   "linia": "",
+   "waga": "🔼"
+  },
+  {
+   "tekst": "Pomysł: widget pogodowy na pulpit",
+   "plik": "demo",
+   "nr": 2,
+   "linia": ""
+  }
+ ]
+}

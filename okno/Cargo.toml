@@ -1,0 +1,16 @@
+[package]
+name = "mozg-okno"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "mozg-okno"
+path = "src/main.rs"
+
+[dependencies]
+gtk = "0.18"
+webkit2gtk = { version = "2.0", features = ["v2_40"] }
+
+[profile.release]
+opt-level = 2
+strip = true

@@ -1,0 +1,18 @@
+# build / deps
+okno/target/
+node_modules/
+__pycache__/
+*.pyc
+# secrets & local config
+.env
+.env.*
+config.json
+!demo/config.json
+# runtime data
+*.db
+*.db-*
+*.sqlite*
+*.log
+logs/
+cache/
+*.bak*

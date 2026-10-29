@@ -1,0 +1,40 @@
+{
+  "agents": {
+    "": "Hermes",
+    "atlas": "Atlas",
+    "nova": "Nova"
+  },
+  "private_folders": [
+    "Dziennik"
+  ],
+  "services": [
+    {
+      "id": "x_github",
+      "label": "GitHub",
+      "match": "github\\.com|\\bgh "
+    },
+    {
+      "id": "x_youtube",
+      "label": "YouTube",
+      "match": "yt-dlp|youtube"
+    },
+    {
+      "id": "x_weather",
+      "label": "Pogoda API",
+      "match": "open-meteo|wttr\\.in"
+    },
+    {
+      "id": "x_ha",
+      "label": "Home Assistant",
+      "match": "homeassistant|:8123",
+      "local": true
+    }
+  ],
+  "hosts": [
+    {
+      "id": "x_nas",
+      "label": "NAS (przykład)",
+      "match": "\\bnas\\.local\\b"
+    }
+  ]
+}

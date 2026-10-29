@@ -1,0 +1,262 @@
+{
+ "turns": [
+  {
+   "agent": "",
+   "source": "telegram",
+   "model": "claude-sonnet-4",
+   "user": "Co mam dziś zrobić w ogrodzie? Pomidory już dojrzewają.",
+   "answer": "Podlej pomidory rano i zbierz dojrzałe owoce.",
+   "tools": [
+    [
+     "skill_view",
+     {
+      "name": "ogrod-podlewanie"
+     }
+    ],
+    [
+     "read_file",
+     {
+      "path": "{vault}/Ogród/Pomidory.md"
+     }
+    ],
+    [
+     "web_search",
+     {
+      "query": "pogoda jutro deszcz"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "",
+   "source": "cli",
+   "model": "claude-opus-4",
+   "user": "Popraw build strony Latarnia, Hugo rzuca błąd szablonu.",
+   "answer": "Naprawione — brakowało partiala.",
+   "tools": [
+    [
+     "read_file",
+     {
+      "path": "{vault}/Projekty/Latarnia - strona.md"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "cd ~/src/latarnia && hugo --minify",
+      "workdir": "~/src/latarnia"
+     }
+    ],
+    [
+     "patch",
+     {
+      "path": "~/src/latarnia/layouts/_default/baseof.html",
+      "old_string": "{{ partial \"head\" . }}",
+      "new_string": "{{ partial \"head.html\" . }}"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "git -C ~/src/latarnia push && gh run watch"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "atlas",
+   "source": "cron",
+   "model": "deepseek-chat",
+   "user": "[cron] Sprawdź wolne miejsce na dyskach i zrób kopię zdjęć.",
+   "answer": "Dyski OK, kopia zrobiona.",
+   "tools": [
+    [
+     "skill_view",
+     {
+      "name": "monitoring-dysku"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "df -h"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "rsync -a ~/Zdjecia/ nas.local:/backup/zdjecia/"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "nova",
+   "source": "discord",
+   "model": "claude-haiku-4",
+   "user": "Streść ten film o kompostowaniu: youtube.com/watch?v=demo",
+   "answer": "Krótkie streszczenie: warstwy zielone i brązowe 1:2, napowietrzanie co tydzień.",
+   "tools": [
+    [
+     "skill_view",
+     {
+      "name": "youtube-streszczenie"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "yt-dlp --write-auto-subs --skip-download 'https://youtube.com/watch?v=demo'"
+     }
+    ],
+    [
+     "write_file",
+     {
+      "path": "{vault}/Ogród/Kompostownik.md",
+      "content": "# Kompostownik\n\n- zielone : brązowe = 1 : 2\n- przerzucać co tydzień\n"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "",
+   "source": "appka",
+   "model": "claude-sonnet-4",
+   "user": "Dopisz do zakupów: soczewica, kmin, pomidory w puszce. Znajdź przepis na dal.",
+   "answer": "Dopisane, przepis zapisany w Obsidianie.",
+   "tools": [
+    [
+     "skill_view",
+     {
+      "name": "lista-zakupow"
+     }
+    ],
+    [
+     "web_extract",
+     {
+      "urls": [
+       "https://example.com/przepis-dal"
+      ]
+     }
+    ],
+    [
+     "write_file",
+     {
+      "path": "{vault}/Przepisy/Dal z soczewicy.md",
+      "content": "# Dal z soczewicy\n\n1. Podsmaż cebulę i kmin.\n2. Dodaj soczewicę i pomidory.\n3. Gotuj 25 min.\n"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "",
+   "source": "telegram",
+   "model": "claude-haiku-4",
+   "user": "Zapamiętaj: klub książki przesunięty na piątek.",
+   "answer": "Zapisane w pamięci.",
+   "tools": [
+    [
+     "memory",
+     {
+      "action": "add",
+      "content": "Klub książki — wyjątkowo w piątek."
+     }
+    ],
+    [
+     "session_search",
+     {
+      "query": "klub książki"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "atlas",
+   "source": "cron",
+   "model": "deepseek-chat",
+   "user": "[cron] Poranna pogoda i światła.",
+   "answer": "12°C, pochmurno. Światła w salonie wyłączone.",
+   "tools": [
+    [
+     "terminal",
+     {
+      "command": "curl -s 'https://api.open-meteo.com/v1/forecast?latitude=50&longitude=20&current=temperature_2m'"
+     }
+    ],
+    [
+     "skill_view",
+     {
+      "name": "home-assistant-swiatla"
+     }
+    ],
+    [
+     "terminal",
+     {
+      "command": "curl -s -X POST http://homeassistant.local:8123/api/services/light/turn_off"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "",
+   "source": "cli",
+   "model": "claude-opus-4",
+   "user": "Napisz testy do aplikacji nawyków.",
+   "answer": "Dodałem 3 testy, wszystkie przechodzą.",
+   "tools": [
+    [
+     "skill_view",
+     {
+      "name": "testy-tdd"
+     }
+    ],
+    [
+     "write_file",
+     {
+      "path": "~/src/nawyki/test_streak.py",
+      "content": "from nawyki import streak\n\n\ndef test_streak_empty():\n    assert streak([]) == 0\n\n\ndef test_streak_three_days():\n    assert streak(['2026-10-01', '2026-10-02', '2026-10-03']) == 3\n"
+     }
+    ],
+    [
+     "execute_code",
+     {
+      "code": "import subprocess\nprint(subprocess.run(['pytest','-q'],capture_output=True,text=True).stdout)"
+     }
+    ],
+    [
+     "delegate_task",
+     {
+      "goal": "code review testów"
+     }
+    ]
+   ]
+  },
+  {
+   "agent": "nova",
+   "source": "discord",
+   "model": "claude-sonnet-4",
+   "user": "Zaplanuj weekend w Bieszczadach.",
+   "answer": "Plan: sobota Tarnica, niedziela Solina.",
+   "tools": [
+    [
+     "read_file",
+     {
+      "path": "{vault}/Podróże/Bieszczady - plan.md"
+     }
+    ],
+    [
+     "web_search",
+     {
+      "query": "Tarnica szlak czas przejścia"
+     }
+    ],
+    [
+     "browser_navigate",
+     {
+      "url": "https://example.com/schroniska"
+     }
+    ]
+   ]
+  }
+ ]
+}

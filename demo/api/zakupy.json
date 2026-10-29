@@ -1,0 +1,28 @@
+{
+ "pozycje": [
+  {
+   "tekst": "Soczewica czerwona",
+   "kupione": false,
+   "nr": 1,
+   "linia": ""
+  },
+  {
+   "tekst": "Kmin rzymski",
+   "kupione": false,
+   "nr": 2,
+   "linia": ""
+  },
+  {
+   "tekst": "Pomidory w puszce",
+   "kupione": false,
+   "nr": 3,
+   "linia": ""
+  },
+  {
+   "tekst": "Kawa ziarnista",
+   "kupione": true,
+   "nr": 4,
+   "linia": ""
+  }
+ ]
+}

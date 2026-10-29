@@ -1,0 +1,57 @@
+{
+ "data": "{d+0}",
+ "dzis": [
+  {
+   "tekst": "Podlać pomidory",
+   "status": "wysoki",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 1,
+   "linia": "",
+   "waga": "⏫"
+  },
+  {
+   "tekst": "Naprawić build strony Latarnia",
+   "status": "wtoku",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 2,
+   "linia": ""
+  },
+  {
+   "tekst": "Kopia zapasowa zdjęć na NAS",
+   "status": "sredni",
+   "data": "{d-1}",
+   "plik": "demo",
+   "nr": 3,
+   "linia": ""
+  },
+  {
+   "tekst": "Przeczytać rozdział 4 na klub książki",
+   "status": "",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 4,
+   "linia": "",
+   "cykl": true
+  }
+ ],
+ "przyszle": [
+  {
+   "tekst": "Wymienić łańcuch w rowerze",
+   "status": "niski",
+   "data": "{d+3}",
+   "plik": "demo",
+   "nr": 5,
+   "linia": ""
+  },
+  {
+   "tekst": "Zarezerwować nocleg w Bieszczadach",
+   "status": "sredni",
+   "data": "{d+5}",
+   "plik": "demo",
+   "nr": 6,
+   "linia": ""
+  }
+ ]
+}
