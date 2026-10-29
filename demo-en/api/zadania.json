@@ -1,0 +1,57 @@
+{
+ "data": "{d+0}",
+ "dzis": [
+  {
+   "tekst": "Water the tomatoes",
+   "status": "wysoki",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 1,
+   "linia": "",
+   "waga": "⏫"
+  },
+  {
+   "tekst": "Fix the Lighthouse site build",
+   "status": "wtoku",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 2,
+   "linia": ""
+  },
+  {
+   "tekst": "Back up photos to the NAS",
+   "status": "sredni",
+   "data": "{d-1}",
+   "plik": "demo",
+   "nr": 3,
+   "linia": ""
+  },
+  {
+   "tekst": "Read chapter 4 for book club",
+   "status": "",
+   "data": "{d+0}",
+   "plik": "demo",
+   "nr": 4,
+   "linia": "",
+   "cykl": true
+  }
+ ],
+ "przyszle": [
+  {
+   "tekst": "Replace the bike chain",
+   "status": "niski",
+   "data": "{d+3}",
+   "plik": "demo",
+   "nr": 5,
+   "linia": ""
+  },
+  {
+   "tekst": "Book accommodation in the Bieszczady",
+   "status": "sredni",
+   "data": "{d+5}",
+   "plik": "demo",
+   "nr": 6,
+   "linia": ""
+  }
+ ]
+}

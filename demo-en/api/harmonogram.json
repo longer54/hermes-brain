@@ -1,0 +1,23 @@
+{
+ "dzis": "{d+0}",
+ "wydarzenia": [
+  {
+   "data": "{d+0}",
+   "od": "09:00",
+   "do": "09:30",
+   "tytul": "Lighthouse project stand-up"
+  },
+  {
+   "data": "{d+0}",
+   "od": "19:00",
+   "do": "21:00",
+   "tytul": "Book club",
+   "miejsce": "City library"
+  },
+  {
+   "data": "{d+1}",
+   "caly": true,
+   "tytul": "Trip to the mountains"
+  }
+ ]
+}

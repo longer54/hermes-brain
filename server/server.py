@@ -6,7 +6,8 @@ Obsidian vault, builds a "neuron" graph and streams agent activity over SSE.
 Python standard library only.
 
     python3 server/server.py            # your own ~/.hermes + vault
-    python3 server/server.py --demo     # fictional demo data from demo/
+    python3 server/server.py --demo     # fictional demo data from demo/ (Polish) or demo-en/ (English)
+    python3 server/server.py --demo --lang en
 """
 import glob
 import json
@@ -22,7 +23,31 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEB = os.path.join(ROOT, "web")
-DEMO_DIR = os.path.join(ROOT, "demo")
+
+# ---------- language ----------
+# "language": "auto" | "en" | "pl" (config file), overridden by MOZG_LANG or `--lang en|pl`.
+# The web UI translates itself (web/index.html); the server only needs the language to pick the demo data set
+# (demo/ = Polish, demo-en/ = English) and to tell the UI the configured default.
+def _argv_lang():
+    for i, a in enumerate(sys.argv):
+        if a.startswith("--lang="):
+            return a.split("=", 1)[1]
+        if a == "--lang" and i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+    return ""
+
+
+def system_lang():
+    loc = (os.environ.get("LC_ALL") or os.environ.get("LC_MESSAGES") or os.environ.get("LANG") or "").lower()
+    return "pl" if loc.startswith("pl") else "en"
+
+
+def norm_lang(v):
+    v = (v or "auto").strip().lower()[:2]
+    return v if v in ("en", "pl") else "auto"
+
+
+DEMO_DIR = os.path.join(ROOT, "demo")  # re-pointed to demo-en/ below when the demo language is English
 
 # ---------- configuration ----------
 # Priority: environment variables > config file > defaults.
@@ -32,6 +57,8 @@ DEFAULTS = {
     "vault": "~/Obsidian/Vault",
     "host": "127.0.0.1",
     "port": 8110,
+    # UI language: "auto" (browser language) | "en" | "pl". Demo data set follows it ("auto" = system locale).
+    "language": "auto",
     # Optional external chat/tasks backend (host:port). Empty = chat and task lists disabled.
     "backend": "",
     # profile folder -> display name; "" = main Hermes profile. Empty dict = auto-detect.
@@ -57,6 +84,7 @@ def load_config(demo=False):
     path = os.environ.get("MOZG_CONFIG") or os.path.expanduser("~/.config/mozg-hermesa/config.json")
     if demo:
         path = os.path.join(DEMO_DIR, "config.json")
+    cli_lang = _argv_lang() or os.environ.get("MOZG_LANG", "")
     if os.path.isfile(path):
         with open(path, encoding="utf-8") as f:
             cfg.update(json.load(f))
@@ -71,6 +99,7 @@ def load_config(demo=False):
     cfg["hermes_home"] = os.path.expanduser(cfg["hermes_home"])
     cfg["vault"] = os.path.expanduser(cfg["vault"])
     cfg["port"] = int(cfg["port"])
+    cfg["language"] = norm_lang(cli_lang) if cli_lang else norm_lang(cfg.get("language"))
     if not cfg["agents"]:
         ag = {"": "Hermes"}
         for p in sorted(glob.glob(os.path.join(cfg["hermes_home"], "profiles", "*"))):
@@ -82,7 +111,21 @@ def load_config(demo=False):
 
 
 DEMO = "--demo" in sys.argv or os.environ.get("MOZG_DEMO", "") not in ("", "0")
+if DEMO:
+    _l = norm_lang(_argv_lang() or os.environ.get("MOZG_LANG", ""))
+    if _l == "auto":  # no explicit choice on the command line: config file (user's), then system locale
+        _uc = os.environ.get("MOZG_CONFIG") or os.path.expanduser("~/.config/mozg-hermesa/config.json")
+        try:
+            with open(_uc, encoding="utf-8") as _f:
+                _l = norm_lang(json.load(_f).get("language"))
+        except (OSError, ValueError):
+            pass
+    DEMO_LANG = system_lang() if _l == "auto" else _l
+    if DEMO_LANG == "en":
+        DEMO_DIR = os.path.join(ROOT, "demo-en")
 CFG = load_config(DEMO)
+if DEMO and _l != "auto":
+    CFG["language"] = _l  # demo follows an explicit choice; "auto" lets the browser decide
 HOME = CFG["hermes_home"]
 VAULT = CFG["vault"]
 AGENTS = CFG["agents"]
@@ -441,9 +484,9 @@ def live_code(limit=40):
                 except ValueError:
                     a = {"raw": fn.get("arguments", "")}
                 if nm == "write_file":
-                    plik, kod, typ = a.get("path", ""), a.get("content", ""), "nowy plik"
+                    plik, kod, typ = a.get("path", ""), a.get("content", ""), "new file"
                 elif nm == "patch":
-                    plik, kod, typ = a.get("path", ""), "--- było\n" + (a.get("old_string") or "") + "\n+++ jest\n" + (a.get("new_string") or ""), "zmiana"
+                    plik, kod, typ = a.get("path", ""), "--- old\n" + (a.get("old_string") or "") + "\n+++ new\n" + (a.get("new_string") or ""), "change"
                 elif nm == "terminal":
                     plik, kod, typ = (a.get("workdir") or "terminal"), a.get("command", ""), "terminal"
                 elif nm == "execute_code":
@@ -459,6 +502,7 @@ def live_code(limit=40):
 if DEMO:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import demo_data  # noqa: E402  (builds throw-away state.db files from demo/sessions.json)
+    demo_data.DEMO_DIR = DEMO_DIR
     DEMO_STATE = demo_data.prepare(HOME, AGENTS)
 
 POLL = Poller()
@@ -516,7 +560,7 @@ class H(BaseHTTPRequestHandler):
         if path in ("/", "/index.html"):
             return self._send(200, open(os.path.join(WEB, "index.html"), "rb").read(), "text/html; charset=utf-8")
         if path == "/config.js":
-            js = "window.MOZG=" + json.dumps({"backend": BACKEND.split("://", 1)[-1], "demo": DEMO, "main": MAIN}) + ";"
+            js = "window.MOZG=" + json.dumps({"backend": BACKEND.split("://", 1)[-1], "demo": DEMO, "main": MAIN, "language": CFG["language"]}) + ";"
             return self._send(200, js.encode(), "application/javascript")
         if path.startswith(self.LISTS) or path.startswith("/api/tryb/") or path.startswith("/api/komendy/"):
             return self._proxy()

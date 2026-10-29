@@ -17,7 +17,7 @@ A live visualisation of the “brain” of [Hermes](https://github.com/NousResea
 - **Side panel** (optional backend) — chat, tasks, schedule, shopping list, meetings.
 - **Privacy** — selected vault folders are shown without note titles; by default the server listens on `127.0.0.1` only.
 - **Native window** (`okno/`, Rust + WebKitGTK) — an optional frameless window with an icon and a menu entry.
-- **Demo mode** — fictional notes, sessions and skills in `demo/`, so you can see it in action without your own Hermes.
+- **Demo mode** — fictional notes, sessions and skills in `demo/` (Polish) and `demo-en/` (English), so you can see it in action without your own Hermes.
 
 ## Requirements
 
@@ -34,6 +34,7 @@ cd hermes-brain
 
 # demo (fictional data, nothing else needed)
 python3 server/server.py --demo        # or: MOZG_DEMO=1 python3 server/server.py
+python3 server/server.py --demo --lang pl   # Polish demo data (default follows system locale)
 # → http://127.0.0.1:8110/
 
 # with your own Hermes
@@ -59,6 +60,7 @@ Precedence: environment variables > config file > defaults. File: `$MOZG_CONFIG`
 | `vault` / `MOZG_VAULT` | `~/Obsidian/Vault` | Obsidian vault |
 | `host` / `MOZG_HOST` | `127.0.0.1` | listen address |
 | `port` / `MOZG_PORT` | `8110` | port |
+| `language` / `MOZG_LANG` / `--lang` | `auto` | UI language: `auto` (browser language), `en` or `pl`. Also sets which demo data set is used |
 | `backend` / `MOZG_BACKEND` | empty | optional chat/tasks backend (`host:port`); empty = chat and lists disabled |
 | `agents` | auto | profile → display name (`""` = main profile) |
 | `private_folders` | `[]` | vault folders shown without note titles |
@@ -70,7 +72,7 @@ The server opens Hermes databases in read-only mode only. Don't expose it to the
 
 ## Status / Roadmap
 
-The UI is currently in Polish; English UI is planned.
+The UI is available in English and Polish. Language selection, in order of priority: `?lang=en|pl` in the URL, the PL/EN switch in the UI (remembered in the browser), the `language` config key (`MOZG_LANG`), then the browser language (Polish → `pl`, anything else → `en`). Polish screenshot: `docs/screenshot-pl.png`.
 
 ## Disclaimer
 

@@ -1,0 +1,17 @@
+{
+ "pozycje": [
+  {
+   "tekst": "Check the headphones warranty",
+   "plik": "demo",
+   "nr": 1,
+   "linia": "",
+   "waga": "🔼"
+  },
+  {
+   "tekst": "Idea: weather widget for the desktop",
+   "plik": "demo",
+   "nr": 2,
+   "linia": ""
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="pl"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Mózg Hermesa · Agent Radar</title>
+<title>Hermes Brain · Agent Radar</title>
 <style>
 :root{--zl:#d4af37;--zl2:#a8862a;--fg:#ececec;--mut:#9a9a9a;--bd:rgba(212,175,55,.22);--bd2:rgba(212,175,55,.45);--rad:#9fd68a;--card:rgba(20,20,22,.72);--pan:rgba(12,12,16,.84);--cw:min(400px,33vw);--rw:min(380px,29vw)}
 html.zw{--rw:0px}
@@ -16,6 +16,7 @@ canvas{position:absolute;top:0;bottom:0;left:var(--cw);width:calc(100% - var(--c
 .logo{font-weight:700;letter-spacing:.18em;color:var(--zl);font-size:11.5px;display:flex;align-items:center;gap:7px;text-transform:uppercase}
 .db{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff 0,#8fd3ff 30%,#2f7fd6 75%,#0b2a5a 100%);box-shadow:0 0 10px #4da6ff88;display:inline-block;position:relative}
 #cmod{flex:1;color:var(--mut);font-size:11px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#lsw{display:flex;gap:2px;margin-left:2px}#lsw button{background:none;border:1px solid #333;color:var(--mut);font:600 10px "Noto Sans",sans-serif;padding:2px 6px;cursor:pointer}#lsw button:first-child{border-radius:999px 0 0 999px}#lsw button:last-child{border-radius:0 999px 999px 0}#lsw button.on{background:rgba(212,175,55,.18);color:var(--zl);border-color:var(--bd2)}
 #cst{color:#555;font-size:12px}#cst.on{color:var(--rad);text-shadow:0 0 8px var(--rad)}
 #bots{display:flex;gap:10px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--bd)}
 .bot .av{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#04050d}
@@ -87,7 +88,7 @@ html.zw #side{border-left:0}
 .kod{border:1px solid #262628;border-radius:12px;margin:0 0 8px;overflow:hidden;background:#0b0b0e}
 .kod>summary{list-style:none;cursor:pointer;padding:8px 10px;font-size:11.5px;display:flex;gap:8px;align-items:center;background:var(--card)}.kod>summary::-webkit-details-marker{display:none}
 .kod .tg{font-size:9.5px;padding:1px 7px;border-radius:999px;background:rgba(212,175,55,.15);color:var(--zl);text-transform:uppercase;letter-spacing:.06em;flex:none}
-.kod .tg.terminal{background:rgba(159,214,138,.14);color:var(--rad)}.kod .tg.zmiana{background:rgba(77,163,255,.15);color:#7fbfff}.kod .tg.python{background:rgba(194,123,255,.15);color:#d4a6ff}
+.kod .tg.terminal{background:rgba(159,214,138,.14);color:var(--rad)}.kod .tg.change{background:rgba(77,163,255,.15);color:#7fbfff}.kod .tg.python{background:rgba(194,123,255,.15);color:#d4a6ff}
 .kod .pl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ddd;direction:rtl;text-align:left}.kod .cz{color:var(--mut);font-size:10px;flex:none}
 .kod pre{margin:0;padding:10px;font:11.5px/1.5 ui-monospace,"JetBrains Mono",monospace;color:#d6d6d6;max-height:420px;overflow:auto;white-space:pre}
 .kod pre span{display:block}.kod pre .dp{color:#7ee787;background:rgba(46,160,67,.12)}.kod pre .dm{color:#ff9b93;background:rgba(248,81,73,.1)}.kod pre .dh{color:var(--zl)}
@@ -106,49 +107,142 @@ html.zw #side{border-left:0}
 }
 </style></head><body>
 <canvas id="c"></canvas>
-<div id="chat" class="panel"><div id="chead"><span class="logo"><span class="db"></span>Rozmowa</span><span id="cmod"></span><span id="ctr" title="tryb"></span><span id="cst" title="połączenie">●</span></div>
+<div id="chat" class="panel"><div id="chead"><span class="logo"><span class="db"></span><span data-i18n="chat">Chat</span></span><span id="cmod"></span><span id="ctr" data-i18n-title="mode"></span><span id="cst" data-i18n-title="conn">●</span><span id="lsw" role="group"><button type="button" data-l="pl">PL</button><button type="button" data-l="en">EN</button></span></div>
 <div id="bots"></div><div id="msgs"></div>
-<div id="pr"></div><div id="catt"></div><form id="cform"><button id="cclip" type="button" title="załącz plik / zdjęcie">📎</button><input id="cfile" type="file" multiple hidden><textarea id="cin" rows="1" lang="pl" spellcheck="true" placeholder="Napisz do agenta…"></textarea><button id="csend" type="submit">➤</button><button id="cstop" type="button" title="stop">■</button></form></div>
-<div id="hud"><div class="t"><span class="db"></span>MÓZG HERMESA</div><div class="s" id="cnt">AGENT RADAR</div></div>
-<div id="feed"></div><div id="st">łączę…</div>
-<button id="sidebtn" title="panel boczny">☰ Panel</button>
+<div id="pr"></div><div id="catt"></div><form id="cform"><button id="cclip" type="button" data-i18n-title="attach">📎</button><input id="cfile" type="file" multiple hidden><textarea id="cin" rows="1" spellcheck="true" data-i18n-ph="ph"></textarea><button id="csend" type="submit">➤</button><button id="cstop" type="button" data-i18n-title="stop">■</button></form></div>
+<div id="hud"><div class="t"><span class="db"></span><span data-i18n="brand"></span></div><div class="s" id="cnt">AGENT RADAR</div></div>
+<div id="feed"></div><div id="st" data-i18n="connecting"></div>
+<button id="sidebtn" data-i18n-title="sidepanel">☰ Panel</button>
 <div id="side" class="panel">
  <div id="tabs">
-  <button class="tab on" data-t="zad"><span class="ic">📋</span>Zadania<span class="n" id="n-zad" hidden></span></button>
-  <button class="tab" data-t="pam"><span class="ic">🔮</span>Pamięć<span class="n" id="n-pam" hidden></span></button>
-  <button class="tab" data-t="zak"><span class="ic">🛒</span>Zakupy<span class="n" id="n-zak" hidden></span></button>
-  <button class="tab" data-t="spo"><span class="ic">🤝</span>Spotkania</button>
-  <button class="tab" data-t="kod"><span class="ic">💻</span>Kod</button>
-  <button class="tab" data-t="moz"><span class="ic">🐉</span>Mózg</button>
+  <button class="tab on" data-t="zad"><span class="ic">📋</span><span data-i18n="tab_zad"></span><span class="n" id="n-zad" hidden></span></button>
+  <button class="tab" data-t="pam"><span class="ic">🔮</span><span data-i18n="tab_pam"></span><span class="n" id="n-pam" hidden></span></button>
+  <button class="tab" data-t="zak"><span class="ic">🛒</span><span data-i18n="tab_zak"></span><span class="n" id="n-zak" hidden></span></button>
+  <button class="tab" data-t="spo"><span class="ic">🤝</span><span data-i18n="tab_spo"></span></button>
+  <button class="tab" data-t="kod"><span class="ic">💻</span><span data-i18n="tab_kod"></span></button>
+  <button class="tab" data-t="moz"><span class="ic">🐉</span><span data-i18n="tab_moz"></span></button>
  </div>
  <div class="pane on" id="p-zad"></div>
  <div class="pane" id="p-pam"></div>
- <div class="pane" id="p-zak"><form class="form" id="zakf"><input id="zaki" placeholder="Dopisz zakup (po przecinku kilka)…"><button>+</button></form><div id="zakl"></div></div>
+ <div class="pane" id="p-zak"><form class="form" id="zakf"><input id="zaki" data-i18n-ph="shop_ph"><button>+</button></form><div id="zakl"></div></div>
  <div class="pane" id="p-spo"></div>
- <div class="pane" id="p-kod"><div id="kodlive"></div><div id="kodl"><div class="pusto">Ładuję…</div></div></div>
- <div class="pane" id="p-moz"><div class="hd">Agenci na radarze</div><div id="agl"></div><div class="hd">Legenda neuronów</div><div id="leg"></div><div class="hd">Ataki i ślady agentów</div><div id="leg2" class="leg" style="grid-template-columns:1fr"></div><div class="pusto" style="text-align:left;font-size:11.5px">Każdy agent strzela swoim atakiem do neuronów, których właśnie używa. Kolorowa linia = trasa BIEŻĄCEJ rozmowy agenta. Po <b>/new</b> ślad znika i rysuje się od nowa. Złote, blade linie = ogólna mapa użycia.</div></div>
+ <div class="pane" id="p-kod"><div id="kodlive"></div><div id="kodl"><div class="pusto" data-i18n="loading"></div></div></div>
+ <div class="pane" id="p-moz"><div class="hd" data-i18n="hd_radar"></div><div id="agl"></div><div class="hd" data-i18n="hd_legend"></div><div id="leg"></div><div class="hd" data-i18n="hd_attacks"></div><div id="leg2" class="leg" style="grid-template-columns:1fr"></div><div class="pusto" style="text-align:left;font-size:11.5px" data-i18n-html="brain_help"></div></div>
 </div>
 <script src="/config.js"></script>
 <script>
 const $=i=>document.getElementById(i);
 const CFG=window.MOZG||{};const CH=CFG.backend||'';const DEMO=!!CFG.demo;
+
+// ===== i18n: PL / EN. Language: ?lang=xx > localStorage > config "language" > navigator.language =====
+const I18N={
+pl:{
+ title:'Mózg Hermesa · Agent Radar',brand:'MÓZG HERMESA',chat:'Rozmowa',mode:'tryb',conn:'połączenie',attach:'załącz plik / zdjęcie',ph:'Napisz do agenta…',stop:'stop',
+ sidepanel:'panel boczny',connecting:'łączę…',live:'● NA ŻYWO',retry:'○ ponawiam…',
+ tab_zad:'Zadania',tab_pam:'Pamięć',tab_zak:'Zakupy',tab_spo:'Spotkania',tab_kod:'Kod',tab_moz:'Mózg',
+ shop_ph:'Dopisz zakup (po przecinku kilka)…',loading:'Ładuję…',
+ hd_radar:'Agenci na radarze',hd_legend:'Legenda neuronów',hd_attacks:'Ataki i ślady agentów',
+ brain_help:'Każdy agent strzela swoim atakiem do neuronów, których właśnie używa. Kolorowa linia = trasa BIEŻĄCEJ rozmowy agenta. Po <b>/new</b> ślad znika i rysuje się od nowa. Złote, blade linie = ogólna mapa użycia.',
+ beam0:'niebieski promień',beam1:'fioletowy promień',beam2:'złoty promień',beam3:'zielony promień',beam4:'czerwony promień',beam5:'turkusowy promień',beam6:'bursztynowy promień',beam7:'różowy promień',
+ k_user:'Ty',k_source:'kanały',k_core:'rdzeń',k_agent:'agenci',k_model:'modele',k_tool:'narzędzia',k_ext:'świat/internet',k_memory:'pamięć',k_skill:'skille',k_vault:'Obsidian',
+ cnt:(n,l)=>`AGENT RADAR · ${n} neuronów · ${l} połączeń`,
+ now:'teraz',ago_min:n=>`${n} min temu`,ago_h:n=>`${n} h temu`,ago_d:n=>`${n} ${n==1?'dzień':'dni'} temu`,nodata:'brak danych',
+ newconv:'nowa rozmowa',nomem:'bot nie pamięta tego, co wyżej',tool:'narzędzie',thinking:'myślę…',now_:'teraz: ',
+ chat_needs_backend:'Czat wymaga backendu (MOZG_BACKEND)',demo_chat:'_(tryb demo — czat wymaga backendu)_',
+ att_tag:'Załącznik',att_only:'(załącznik)',device:'Mózg Hermesa (przeglądarka)',pasted:'wklejony',rm_att:'usuń załącznik',
+ ze_once:'Zezwól raz',ze_session:'Zezwól w tej rozmowie',ze_always:'Zawsze',ze_deny:'Odmów',ask_perm:'Agent prosi o zgodę',ask_q:'Agent pyta',close:'zamknij',
+ server_err:'serwer: ',
+ today:'Dziś',tomorrow:'Jutro',day2:'Pojutrze',overdue1:'1 dzień po terminie',overdue:n=>`${n} dni po terminie`,
+ prio_cito:'Cito',prio_wysoki:'Wysoki',prio_sredni:'Średni',prio_niski:'Niski',prio_czeka:'Najniższy / czeka',prio_wtoku:'W toku',prio_none:'Bez priorytetu',
+ move_to:'Przenieś na:',save_fail:'Nie zapisałem: ',done_fail:'Nie wyszło: ',tick:'odhacz',prio_term:'priorytet i termin',recurring:'🔁 cykliczne',
+ hd_today:'Na dziś',tasks_err:'Nie mogę pobrać zadań',tasks_empty:'Czysto na dziś 🐉',hd_sched:'Harmonogram',allday:'cały dzień',hd_future:'Na przyszłość',
+ hd_mem:'Pamięć',mem_err:'Nie mogę pobrać pamięci',mem_empty:'Pusto — dopisz „#pamięć” do zadania w Obsidianie',
+ shop_err:'Nie mogę pobrać zakupów',hd_buy:'Do kupienia',shop_empty:'Lista pusta',hd_bought:'Kupione',already:'Już na liście: ',add_fail:'Nie dodałem: ',
+ meet_err:'Nie mogę pobrać spotkań',hd_meet:'Spotkania',meet_empty:'Brak spotkań',open_of:(o,n)=>`${o} otwartych z ${n}`,
+ code_err:'Nie mogę pobrać kodu',code_empty:'Przez ostatnie 2 godziny żaden agent nie pisał kodu',
+ kind_terminal:'terminal',kind_change:'zmiana',kind_python:'python','kind_new file':'nowy plik',kind_skill:'skill',
+ diff_old:'było',diff_new:'jest',
+ note:'notatka',gateway:'Brama',youn:'TY',
+ ev_request:'żądanie',ev_thinking:'myślenie',ev_skill:'skill',ev_skill_auto:'skill (auto)',ev_skill_file:'skill (plik)',ev_skill_script:'skill (skrypt)',ev_memory:'pamięć',ev_longmem:'pamięć długa',
+ ev_memory_loaded:'pamięć wczytana',ev_memory_write:'zapis pamięci',ev_subagents:'subagenci',ev_browser:'przeglądarka',ev_note:'notatka',ev_vault:'vault',ev_code:'kod',ev_terminal:'terminal',ev_terminal_ssh:'terminal (ssh)',ev_web_search:'szukanie w sieci',ev_web_extract:'pobranie strony',
+ n_gateway:'Brama',n_user:'TY',n_other:'inny model',n_t_terminal:'Terminal',n_t_files:'Pliki',n_t_web:'Szukanie w sieci',n_t_browser:'Przeglądarka',n_t_delegate:'Subagenci',n_t_memory:'Pamięć (zapis)',n_t_skills:'Skille',n_t_code:'Kod',n_t_misc:'Inne narzędzia',
+ n_x_internet:'INTERNET',n_mem_hub:'Pamięć',n_sk_hub:'Skille'
+},
+en:{
+ title:'Hermes Brain · Agent Radar',brand:'HERMES BRAIN',chat:'Chat',mode:'mode',conn:'connection',attach:'attach a file / image',ph:'Message the agent…',stop:'stop',
+ sidepanel:'side panel',connecting:'connecting…',live:'● LIVE',retry:'○ reconnecting…',
+ tab_zad:'Tasks',tab_pam:'Memory',tab_zak:'Shopping',tab_spo:'Meetings',tab_kod:'Code',tab_moz:'Brain',
+ shop_ph:'Add an item (comma-separated for several)…',loading:'Loading…',
+ hd_radar:'Agents on the radar',hd_legend:'Neuron legend',hd_attacks:'Agent attacks & trails',
+ brain_help:'Each agent fires its own beam at the neurons it is using right now. A coloured line = the route of the agent’s CURRENT conversation. After <b>/new</b> the trail disappears and is drawn anew. Pale golden lines = the overall usage map.',
+ beam0:'blue beam',beam1:'purple beam',beam2:'golden beam',beam3:'green beam',beam4:'red beam',beam5:'teal beam',beam6:'amber beam',beam7:'pink beam',
+ k_user:'You',k_source:'channels',k_core:'core',k_agent:'agents',k_model:'models',k_tool:'tools',k_ext:'world/internet',k_memory:'memory',k_skill:'skills',k_vault:'Obsidian',
+ cnt:(n,l)=>`AGENT RADAR · ${n} neurons · ${l} connections`,
+ now:'just now',ago_min:n=>`${n} min ago`,ago_h:n=>`${n} h ago`,ago_d:n=>`${n} ${n==1?'day':'days'} ago`,nodata:'no data',
+ newconv:'new conversation',nomem:'the bot does not remember anything above',tool:'tool',thinking:'thinking…',now_:'now: ',
+ chat_needs_backend:'Chat needs a backend (MOZG_BACKEND)',demo_chat:'_(demo mode — chat needs a backend)_',
+ att_tag:'Attachment',att_only:'(attachment)',device:'Hermes Brain (browser)',pasted:'pasted',rm_att:'remove attachment',
+ ze_once:'Allow once',ze_session:'Allow for this conversation',ze_always:'Always',ze_deny:'Deny',ask_perm:'The agent asks for permission',ask_q:'The agent asks',close:'close',
+ server_err:'server: ',
+ today:'Today',tomorrow:'Tomorrow',day2:'Day after tomorrow',overdue1:'1 day overdue',overdue:n=>`${n} days overdue`,
+ prio_cito:'Urgent',prio_wysoki:'High',prio_sredni:'Medium',prio_niski:'Low',prio_czeka:'Lowest / waiting',prio_wtoku:'In progress',prio_none:'No priority',
+ move_to:'Move to:',save_fail:'Could not save: ',done_fail:'Did not work: ',tick:'tick off',prio_term:'priority and due date',recurring:'🔁 recurring',
+ hd_today:'Today',tasks_err:'Cannot load tasks',tasks_empty:'All clear for today 🐉',hd_sched:'Schedule',allday:'all day',hd_future:'Upcoming',
+ hd_mem:'Memory',mem_err:'Cannot load memory',mem_empty:'Empty — add “#memory” to a task in Obsidian',
+ shop_err:'Cannot load shopping list',hd_buy:'To buy',shop_empty:'List is empty',hd_bought:'Bought',already:'Already on the list: ',add_fail:'Could not add: ',
+ meet_err:'Cannot load meetings',hd_meet:'Meetings',meet_empty:'No meetings',open_of:(o,n)=>`${o} open of ${n}`,
+ code_err:'Cannot load code',code_empty:'No agent has written code in the last 2 hours',
+ kind_terminal:'terminal',kind_change:'change',kind_python:'python','kind_new file':'new file',kind_skill:'skill',
+ diff_old:'old',diff_new:'new',
+ note:'note',gateway:'Gateway',youn:'YOU',
+ ev_request:'request',ev_thinking:'thinking',ev_skill:'skill',ev_skill_auto:'skill (auto)',ev_skill_file:'skill (file)',ev_skill_script:'skill (script)',ev_memory:'memory',ev_longmem:'long memory',
+ ev_memory_loaded:'memory loaded',ev_memory_write:'memory write',ev_subagents:'subagents',ev_browser:'browser',ev_note:'note',ev_vault:'vault',ev_code:'code',ev_terminal:'terminal',ev_terminal_ssh:'terminal (ssh)',ev_web_search:'web search',ev_web_extract:'web extract',
+ n_gateway:'Gateway',n_user:'YOU',n_other:'other model',n_t_terminal:'Terminal',n_t_files:'Files',n_t_web:'Web search',n_t_browser:'Browser',n_t_delegate:'Subagents',n_t_memory:'Memory (write)',n_t_skills:'Skills',n_t_code:'Code',n_t_misc:'Other tools',
+ n_x_internet:'INTERNET',n_mem_hub:'Memory',n_sk_hub:'Skills'
+}};
+const LANGS=['pl','en'];
+function pickLang(){
+  const norm=v=>{v=String(v||'').toLowerCase().slice(0,2);return LANGS.includes(v)?v:null};
+  let l=null;try{l=norm(new URLSearchParams(location.search).get('lang'))}catch(e){}
+  if(!l)try{l=norm(localStorage.getItem('mozg-lang'))}catch(e){}
+  if(!l)l=norm((window.MOZG||{}).language);
+  return l||((navigator.language||'en').toLowerCase().startsWith('pl')?'pl':'en')}
+const LANG=pickLang();
+const LOC=LANG=='pl'?'pl-PL':'en-US';
+function t(k,...a){let v=(I18N[LANG]||{})[k];if(v===undefined)v=I18N.en[k];if(v===undefined)v=k;return typeof v=='function'?v(...a):v}
+// server event labels ("request · telegram", "skill: name", "note: x.md"…) are stable English keys; translate the prefix
+const EVMAP={'request':'ev_request','thinking':'ev_thinking','skill':'ev_skill','skill (auto)':'ev_skill_auto','skill (file)':'ev_skill_file','skill (script)':'ev_skill_script','memory':'ev_memory','long memory':'ev_longmem',
+ 'memory loaded':'ev_memory_loaded','memory write':'ev_memory_write','subagents':'ev_subagents','browser':'ev_browser','note':'ev_note','vault':'ev_vault','code':'ev_code','terminal':'ev_terminal','terminal (ssh)':'ev_terminal_ssh','web search':'ev_web_search','web extract':'ev_web_extract'};
+function evLabel(l){l=String(l||'');const m=l.match(/^([^:·]+?)(\s*[:·]\s*)([\s\S]*)$/);const key=EVMAP[(m?m[1]:l).trim()];
+  if(!key)return l;return m?t(key)+m[2]+m[3]:t(key)}
+function nodeLabel(n){const k='n_'+n.id;if(I18N.en[k]!==undefined)return t(k);if(n.kind=='note'&&n.label=='note')return t('note');return n.label}
+function applyLang(){
+  document.documentElement.lang=LANG;document.title=t('title');
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-html]').forEach(e=>e.innerHTML=t(e.dataset.i18nHtml));
+  document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
+  document.querySelectorAll('[data-i18n-title]').forEach(e=>e.title=t(e.dataset.i18nTitle));
+  const ci=document.getElementById('cin');if(ci)ci.lang=LANG;
+  document.querySelectorAll('#lsw button').forEach(b=>{b.classList.toggle('on',b.dataset.l==LANG);b.onclick=()=>{try{localStorage.setItem('mozg-lang',b.dataset.l)}catch(e){}
+    const u=new URL(location.href);u.searchParams.delete('lang');location.href=u.toString()}})}
+applyLang();
 const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 // every agent gets its own colour + beam style (palette picked by a hash of the name)
-const PAL=[{n:'niebieski promień',c:['#1565ff','#2fc4ff','#b8f1ff'],w:1,z:.4},
- {n:'fioletowy promień',c:['#5b00e0','#a53dff','#efc6ff'],w:1.1,z:.8},
- {n:'złoty promień',c:['#ff8800','#ffd23a','#fff5bf'],w:.95,z:.3},
- {n:'zielony promień',c:['#00a23c','#3dff7a','#d2ffe0'],w:1.25,z:.3},
- {n:'czerwony promień',c:['#a8001c','#ff3b2f','#ffcabf'],w:1.1,z:.5},
- {n:'turkusowy promień',c:['#008f8a','#2ff0e2','#c9fffa'],w:1,z:.3},
- {n:'bursztynowy promień',c:['#c97800','#ffc23d','#fff0c9'],w:.85,z:.2},
- {n:'różowy promień',c:['#c2185b','#ff6fb5','#ffd4e9'],w:.95,z:.3}];
+const PAL=[{n:'beam0',c:['#1565ff','#2fc4ff','#b8f1ff'],w:1,z:.4},
+ {n:'beam1',c:['#5b00e0','#a53dff','#efc6ff'],w:1.1,z:.8},
+ {n:'beam2',c:['#ff8800','#ffd23a','#fff5bf'],w:.95,z:.3},
+ {n:'beam3',c:['#00a23c','#3dff7a','#d2ffe0'],w:1.25,z:.3},
+ {n:'beam4',c:['#a8001c','#ff3b2f','#ffcabf'],w:1.1,z:.5},
+ {n:'beam5',c:['#008f8a','#2ff0e2','#c9fffa'],w:1,z:.3},
+ {n:'beam6',c:['#c97800','#ffc23d','#fff0c9'],w:.85,z:.2},
+ {n:'beam7',c:['#c2185b','#ff6fb5','#ffd4e9'],w:.95,z:.3}];
 const hsh=a=>{let h=0;for(const ch of String(a||''))h=(h*31+ch.charCodeAt(0))>>>0;return h};
 const atk=a=>PAL[hsh(a)%PAL.length];
 const agc=a=>atk(a).c[1];
 const AGN=[];  // agent names seen on the graph (for the radar)
 const COL={user:'#ffd34d',source:'#ffa94d',core:'#ffffff',agent:'#ff9f1c',model:'#c58bff',tool:'#4de2ff',ext:'#5dff9a',
 memhub:'#ff6fb5',memory:'#ff6fb5',skhub:'#5b8cff',skill:'#5b8cff',vaulthub:'#e8d84a',vault:'#e8d84a',note:'#c9b94a'};
-const KN={user:'Ty',source:'kanały',core:'rdzeń',agent:'agenci',model:'modele',tool:'narzędzia',ext:'świat/internet',memory:'pamięć',skill:'skille',vault:'Obsidian'};
+const KN=new Proxy({},{get:(o,k)=>t('k_'+String(k)),ownKeys:()=>['user','source','core','agent','model','tool','ext','memory','skill','vault'],getOwnPropertyDescriptor:(o,k)=>({enumerable:true,configurable:true,value:t('k_'+String(k))})});
 const cv=$('c'),cx=cv.getContext('2d');
 let W=1,H=1,DPR=Math.min(2,devicePixelRatio||1);
 let nodes=[],links=[],byId={},view={x:0,y:0,k:1},ext=0,BB={cx:0,cy:0,rx:300,ry:300};
@@ -157,7 +251,7 @@ let bgC=null;
 function rs(){W=cv.clientWidth||innerWidth;H=cv.clientHeight||innerHeight;cv.width=W*DPR;cv.height=H*DPR;fit();makeBg()}
 addEventListener('resize',rs);new ResizeObserver(rs).observe(cv);
 $('leg').innerHTML='<div class="leg">'+Object.entries(KN).map(([k,v])=>`<span style="color:${COL[k]}"><i style="background:${COL[k]}"></i><b style="color:#ddd;font-weight:400">${v}</b></span>`).join('')+'</div>';
-const drawLeg2=()=>$('leg2').innerHTML=AGN.map(k=>[k,agc(k)]).map(([k,v])=>`<span style="color:${v}"><i style="background:${v}"></i>${k}<b style="font-weight:400;margin-left:auto;color:${atk(k).c[1]}">⚡ ${atk(k).n}</b></span>`).join('');
+const drawLeg2=()=>$('leg2').innerHTML=AGN.map(k=>[k,agc(k)]).map(([k,v])=>`<span style="color:${v}"><i style="background:${v}"></i>${k}<b style="font-weight:400;margin-left:auto;color:${atk(k).c[1]}">⚡ ${t(atk(k).n)}</b></span>`).join('');
 
 function layout(){
   const P=(ang,rad)=>[Math.cos(ang*Math.PI/180)*rad,Math.sin(ang*Math.PI/180)*rad];
@@ -198,7 +292,7 @@ function layout(){
   fit();
 }
 fetch('/api/graph').then(r=>r.json()).then(g=>{nodes=g.nodes;links=g.links;nodes.forEach(n=>byId[n.id]=n);layout();
-  $('cnt').textContent=`AGENT RADAR · ${nodes.length} neuronów · ${links.length} połączeń`;
+  nodes.forEach(n=>{n.label=nodeLabel(n)});$('cnt').textContent=t('cnt',nodes.length,links.length);
   fetch('/api/heat').then(r=>r.json()).then(x=>{const all=x.all||x;for(const k in all)if(typeof all[k]=='number')heat[k]=all[k];
     for(const key in (x.cur||{})){const c=x.cur[key];sess[key]={conv:c.conv,ag:key.split('|')[0],edges:c.edges||{}}}}).catch(()=>{}).finally(connect)});
 
@@ -247,7 +341,7 @@ function drawGrid(t,T){const [x,y]=T(BB.cx,BB.cy),R=ext*view.k*1.25;
 
 
 const queue=[],pulses=[],heat={},fresh={},sess={};
-// ===== ATAKI: promienie energii lecące do neuronów (kolory i styl z ATK) =====
+// ===== ATTACKS: energy beams flying to the neurons (colours and style from PAL) =====
 const beams=[],booms=[];
 function bolt(x,y,len,u,col){const a=Math.random()*6.283;cx.strokeStyle=rgba(col||'#e1faff',.9);cx.lineWidth=Math.max(.8,.75*u);cx.beginPath();cx.moveTo(x,y);
   for(let i=1;i<=4;i++){const r=len*i/4;cx.lineTo(x+Math.cos(a)*r+(Math.random()-.5)*len*.4,y+Math.sin(a)*r+(Math.random()-.5)*len*.4)}cx.stroke()}
@@ -271,25 +365,25 @@ function boom(x,y,q,u,K){K=K||PAL[0];const C=K.c,e=1-q,R=(5+28*q)*u;cx.globalAlp
   if(q<.35){cx.globalAlpha=1-q/.35;cx.drawImage(glow(C[2]),x-R*1.1,y-R*1.1,R*2.2,R*2.2)}cx.globalAlpha=1}
 let seen=0;
 function connect(){const es=new EventSource('/events?since='+seen);
-  es.onopen=()=>{$('st').textContent='● NA ŻYWO';$('st').className='on'};
+  es.onopen=()=>{$('st').textContent=t('live');$('st').className='on'};
   es.onmessage=m=>{const e=JSON.parse(m.data);seen=e.id;queue.push(e);if(queue.length>120)queue.splice(0,queue.length-120)};
-  es.onerror=()=>{$('st').textContent='○ ponawiam…';$('st').className=''}}
+  es.onerror=()=>{$('st').textContent=t('retry');$('st').className=''}}
 const feed=$('feed');
 function launch(e){
   const ids=(e.path||[]).filter(i=>byId[i]);if(ids.length<2){if(ids[0])byId[ids[0]].e=1}
   const key=e.agent+'|'+(e.src||'?');let S=sess[key];
   if(!S||(e.conv&&S.conv!==e.conv)){S=sess[key]={conv:e.conv,ag:e.agent,edges:{}}}
   pulses.push({ids,i:0,p:0,ch:0,seed:Math.random()*100,col:agc(e.agent),K:atk(e.agent),key});
-  const d=document.createElement('div');d.innerHTML=`<span style="color:${agc(e.agent)}">●</span> <b>${esc(e.agent)}</b> ${esc(e.label)}`;feed.appendChild(d);
+  const d=document.createElement('div');d.innerHTML=`<span style="color:${agc(e.agent)}">●</span> <b>${esc(e.agent)}</b> ${esc(evLabel(e.label))}`;feed.appendChild(d);
   while(feed.children.length>7)feed.removeChild(feed.firstChild);
   if(/write_file|patch|terminal|execute_code/.test(e.label||''))kodPing();
 }
 const radar={got:0,ag:{},off:0};
 function pollRadar(){fetch('/api/radar').then(r=>r.json()).then(d=>{radar.ag=d.agents||{};radar.off=d.now-Date.now()/1000;radar.got=1;if(tab=='moz')drawAgl()}).catch(()=>{})}
 const RAD=AGN;
-function ago(s){s=Math.max(0,s);return s<60?'teraz':s<3600?Math.round(s/60)+' min temu':s<86400?Math.round(s/3600)+' h temu':Math.round(s/86400)+' dni temu'}
+function ago(s){s=Math.max(0,s);return s<60?t('now'):s<3600?t('ago_min',Math.round(s/60)):s<86400?t('ago_h',Math.round(s/3600)):t('ago_d',Math.round(s/86400))}
 function drawAgl(){const now=Date.now()/1000+radar.off;$('agl').innerHTML=RAD.filter(n=>radar.ag[n]).sort((a,b)=>radar.ag[b]-radar.ag[a]).map(n=>{const s=now-radar.ag[n];
-  return`<div class="ag"><span class="d" style="background:${s<600?'#ff3b1f':'#4a6b3f'};box-shadow:0 0 8px ${s<600?'#ff3b1f':'transparent'}"></span><b style="color:${agc(n)}">${n}</b><span class="w">${ago(s)}</span></div>`}).join('')||'<div class="pusto">brak danych</div>'}
+  return`<div class="ag"><span class="d" style="background:${s<600?'#ff3b1f':'#4a6b3f'};box-shadow:0 0 8px ${s<600?'#ff3b1f':'transparent'}"></span><b style="color:${agc(n)}">${n}</b><span class="w">${ago(s)}</span></div>`}).join('')||'<div class="pusto">'+t('nodata')+'</div>'}
 function drawRadar(t){
   const R=Math.max(52,Math.min(82,Math.min(W,H)*.14)),x0=W-R-16,y0=H-R-26;
   cx.save();
@@ -410,14 +504,14 @@ const clean=t=>String(t||'').replace(/\n*\[📍[^\]]*\]/g,'').replace(/^\[Note:[
 function addMsg(role,txt,old){const d=document.createElement('div');d.className='msg '+(role=='user'?'u':'a')+(old?' old':'');if(role=='user')d.textContent=txt;else d.innerHTML=md(txt);$('msgs').appendChild(d);return d}
 function scr(){const m=$('msgs');m.scrollTop=m.scrollHeight}
 function setBusy(b){busy=b;$('cstop').style.display=b?'block':'none';$('csend').style.display=b?'none':'block';document.querySelectorAll('.bot').forEach(e=>e.classList.toggle('busy',b&&e.dataset.id==cur))}
-function fmtCzas(s){return new Date(s*1000).toLocaleString('pl-PL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function fmtCzas(s){return new Date(s*1000).toLocaleString(LOC,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
 function render(list){const box=$('msgs');box.innerHTML='';list=list.slice(-160);
   const biez=list.length?list[list.length-1].sesja:null;let prev,chips=null;
   for(const m of list){
-    if(prev!==undefined&&m.sesja&&m.sesja!==prev){const s=document.createElement('div');s.className='sep';s.innerHTML=`<span><b>nowa rozmowa</b> · ${fmtCzas(m.czas)}${m.sesja===biez?'<br>bot nie pamięta tego, co wyżej':''}</span>`;box.appendChild(s);chips=null}
+    if(prev!==undefined&&m.sesja&&m.sesja!==prev){const s=document.createElement('div');s.className='sep';s.innerHTML=`<span><b>${t('newconv')}</b> · ${fmtCzas(m.czas)}${m.sesja===biez?'<br>'+t('nomem'):''}</span>`;box.appendChild(s);chips=null}
     if(m.sesja)prev=m.sesja;
     if(m.rola=='assistant'&&m.narzedzia&&m.narzedzia.length){if(!chips){chips=document.createElement('div');chips.className='chips'+(m.dawna?' old':'');box.appendChild(chips)}
-      m.narzedzia.forEach(n=>{if(chips.children.length<14){const c=document.createElement('span');c.className='chip';c.innerHTML='<i>⚙</i> '+esc(n.nazwa||'narzędzie');chips.appendChild(c)}})}
+      m.narzedzia.forEach(n=>{if(chips.children.length<14){const c=document.createElement('span');c.className='chip';c.innerHTML='<i>⚙</i> '+esc(n.nazwa||t('tool'));chips.appendChild(c)}})}
     if(m.rola!='user'&&m.rola!='assistant')continue;const t=clean(m.tekst||'');if(!t)continue;chips=null;addMsg(m.rola,t,m.dawna)}
   live=null;scr()}
 function openWs(){
@@ -428,7 +522,7 @@ function openWs(){
   ws.onmessage=e=>{const m=JSON.parse(e.data);
     if(m.typ=='stan'){setBusy(!!m.zajety);if(m.model)$('cmod').textContent=m.model}
     else if(m.typ=='historia'){render(m.wiadomosci||[])}
-    else if(m.typ=='start'){setBusy(true);live=addMsg('assistant','');live.innerHTML='<span class="dots">myślę…</span>';scr()}
+    else if(m.typ=='start'){setBusy(true);live=addMsg('assistant','');live.innerHTML='<span class="dots">'+t('thinking')+'</span>';scr()}
     else if(m.typ=='koniec'){setBusy(false);kodPing();pqWyczysc('#pr .pc')}  // end of turn = pending questions are obsolete
     else if(m.typ=='prosba'){prosba(m)}
     else if(m.typ=='prosba_anulowana'){pqZamknij(m.dane&&m.dane.id);const e=document.getElementById('pq-'+(m.dane&&m.dane.id));if(e)e.remove()}
@@ -436,24 +530,24 @@ function openWs(){
     else if(m.typ=='zdarzenie'){const d=m.dane||{};
       if(!live&&busy){live=addMsg('assistant','')}
       if(m.rodzaj=='message.delta'&&live){live._t=(live._t||'')+(d.text||'');live.innerHTML=md(live._t);scr()}
-      else if(m.rodzaj=='message.set'&&live){live._t=d.text||'';live.innerHTML=live._t?md(live._t):'<span class="dots">myślę…</span>';scr()}
-      else if(m.rodzaj=='tool.start'){const txt='⚙ '+(d.name||'narzędzie')+(d.context?' · '+String(d.context).slice(0,60):'');$('kodlive').textContent='teraz: '+txt;
+      else if(m.rodzaj=='message.set'&&live){live._t=d.text||'';live.innerHTML=live._t?md(live._t):'<span class="dots">'+t('thinking')+'</span>';scr()}
+      else if(m.rodzaj=='tool.start'){const txt='⚙ '+(d.name||t('tool'))+(d.context?' · '+String(d.context).slice(0,60):'');$('kodlive').textContent=t('now_')+txt;
         if(live){let t=live.querySelector('.tl');if(!t){t=document.createElement('div');t.className='tl';live.prepend(t)}t.textContent=txt}
         if(/write_file|patch|terminal|execute_code/.test(d.name||''))kodPing()}}
   }}
 function pick(id){cur=id;if(!CH){demoChat(id)}$('pr').innerHTML='';setTimeout(loadTr,0);document.querySelectorAll('.bot').forEach(e=>e.classList.toggle('on',e.dataset.id==id));$('msgs').innerHTML='';$('cmod').textContent='';openWs()}
 const ini=n=>String(n||'?').split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 function demoChat(id){fetch('/api/czat-demo').then(r=>r.json()).then(l=>{if(cur!=id)return;render((l||[]).filter(m=>!m.bot||m.bot==id));
-  if(!l||!l.length)$('msgs').innerHTML='<div class="pusto">Czat wymaga backendu (MOZG_BACKEND)</div>'}).catch(()=>{})}
+  if(!l||!l.length)$('msgs').innerHTML='<div class="pusto">'+t('chat_needs_backend')+'</div>'}).catch(()=>{})}
 fetch('/api/boty').then(r=>r.json()).then(l=>{bots=l.filter(b=>!b.zdalny);$('bots').innerHTML=bots.map(b=>`<div class="bot" data-id="${b.id}" style="--c:${b.kolor||agc(b.nazwa)}"><span class="av" style="background:${agc(b.nazwa)}">${esc(ini(b.nazwa))}</span><span>${esc(b.nazwa||b.id)}</span></div>`).join('');
   document.querySelectorAll('.bot').forEach(e=>e.onclick=()=>pick(e.dataset.id));if(bots[0])pick(bots[0].id);if(CH)openAvWs()}).catch(()=>{});
 function send(){const t=$('cin').value.trim();const ready=atts.filter(a=>a.path);
-  if(DEMO&&!CH){addMsg('user',t);$('cin').value='';addMsg('assistant','_(tryb demo — czat wymaga backendu)_');scr();return}
+  if(DEMO&&!CH){addMsg('user',t);$('cin').value='';addMsg('assistant',t('demo_chat'));scr();return}
   if((!t&&!ready.length)||!ws||ws.readyState!=1||atts.some(a=>!a.path&&!a.err))return;
-  const zal=ready.map(a=>`[📎 Załącznik: ${a.name} — ${a.path}]`).join('\n');
-  const d=addMsg('user',t||'(załącznik)');ready.forEach(a=>{if(/^image\//.test(a.type)||/\.(png|jpe?g|gif|webp)$/i.test(a.name)){const i=document.createElement('img');i.src='http://'+CH+'/zalaczniki/'+a.path.split('/zalaczniki/')[1];d.appendChild(i)}else{const s=document.createElement('div');s.className='tl';s.textContent='📎 '+a.name;d.appendChild(s)}});scr();
-  ws.send(JSON.stringify({typ:'wyslij',tekst:(t+(zal?'\n\n'+zal:'')).trim(),urzadzenie:'Mózg Hermesa (przeglądarka)'}));
-  pqWyczysc('#pr .pc.q');  // własna wiadomość zamiast kliknięcia = pytanie anulowane
+  const zal=ready.map(a=>`[📎 ${t('att_tag')}: ${a.name} — ${a.path}]`).join('\n');
+  const d=addMsg('user',t||t('att_only'));ready.forEach(a=>{if(/^image\//.test(a.type)||/\.(png|jpe?g|gif|webp)$/i.test(a.name)){const i=document.createElement('img');i.src='http://'+CH+'/zalaczniki/'+a.path.split('/zalaczniki/')[1];d.appendChild(i)}else{const s=document.createElement('div');s.className='tl';s.textContent='📎 '+a.name;d.appendChild(s)}});scr();
+  ws.send(JSON.stringify({typ:'wyslij',tekst:(t+(zal?'\n\n'+zal:'')).trim(),urzadzenie:t('device')}));
+  pqWyczysc('#pr .pc.q');  // typing a message instead of clicking = question cancelled
   atts=[];drawAtt();$('cin').value='';$('cin').style.height='auto';setBusy(true)}
 $('cform').onsubmit=e=>{e.preventDefault();send()};
 $('cin').onkeydown=e=>{if(e.key=='Enter'&&!e.shiftKey){e.preventDefault();send()}};
@@ -461,30 +555,30 @@ $('cin').oninput=e=>{e.target.style.height='auto';e.target.style.height=Math.min
 $('cstop').onclick=()=>ws&&ws.send(JSON.stringify({typ:'stop'}));
 ['pointerdown','pointermove','wheel'].forEach(ev=>{chat.addEventListener(ev,e=>e.stopPropagation());$('side').addEventListener(ev,e=>e.stopPropagation())});
 
-const ZE={once:'Zezwól raz',session:'Zezwól w tej rozmowie',always:'Zawsze',deny:'Odmów'};
+const ZE={get once(){return t('ze_once')},get session(){return t('ze_session')},get always(){return t('ze_always')},get deny(){return t('ze_deny')}};
 // the gateway may resend an old, already answered question after reconnect — remember closed ones
 function pqZamkn(){try{return JSON.parse(localStorage.getItem('pqZamkniete')||'[]')}catch(e){return[]}}
 function pqZamknij(id){if(!id)return;const l=pqZamkn().filter(x=>x!==id);l.push(id);localStorage.setItem('pqZamkniete',JSON.stringify(l.slice(-200)))}
 function pqWyczysc(sel){document.querySelectorAll(sel).forEach(e=>{pqZamknij(e.id.replace(/^pq-/,''));e.remove()})}
 function prosba(m){if(pqZamkn().includes(String(m.id)))return;const old=document.getElementById('pq-'+m.id);if(old)old.remove();const d=m.dane||{},c=document.createElement('div');c.className='pc'+(m.metoda=='approval'?'':' q');c.id='pq-'+m.id;
  let wy=[],hd='';
- if(m.metoda=='approval'){hd='🔐 '+esc(d.description||'Agent prosi o zgodę');wy=(d.choices&&d.choices.length?d.choices:['once','deny']).map(w=>[w,ZE[w]||w,{choice:w}])}
- else{const q=d.question||(d.questions&&d.questions[0]&&d.questions[0].question)||'Agent pyta';const ch=d.choices||(d.questions&&d.questions[0]&&d.questions[0].choices)||[];hd='❓ '+esc(q);
+ if(m.metoda=='approval'){hd='🔐 '+esc(d.description||t('ask_perm'));wy=(d.choices&&d.choices.length?d.choices:['once','deny']).map(w=>[w,ZE[w]||w,{choice:w}])}
+ else{const q=d.question||(d.questions&&d.questions[0]&&d.questions[0].question)||t('ask_q');const ch=d.choices||(d.questions&&d.questions[0]&&d.questions[0].choices)||[];hd='❓ '+esc(q);
   wy=ch.map(w=>[w,w,d.questions&&d.questions.length?{answers:{[d.questions[0].qid]:w}}:{answer:w}])}
- c.innerHTML='<div><span class="pqx" title="zamknij" style="float:right;cursor:pointer;opacity:.7;padding:0 4px">✕</span>'+hd+'</div>'+(d.command?'<pre>'+esc(d.command)+'</pre>':'')+'<div class="bt"></div>';
+ c.innerHTML='<div><span class="pqx" title="'+t('close')+'" style="float:right;cursor:pointer;opacity:.7;padding:0 4px">✕</span>'+hd+'</div>'+(d.command?'<pre>'+esc(d.command)+'</pre>':'')+'<div class="bt"></div>';
  c.querySelector('.pqx').onclick=()=>{pqZamknij(String(m.id));c.remove()};
  const bt=c.querySelector('.bt');wy.forEach(([w,l,r])=>{const b=document.createElement('button');b.textContent=l;if(w=='deny')b.className='d';b.onclick=()=>{ws.send(JSON.stringify({typ:'odpowiedz',id:m.id,wynik:r}));pqZamknij(String(m.id));c.remove()};bt.appendChild(b)});
  if(m.metoda!='approval'&&!wy.length){const i=document.createElement('input');i.style.cssText='width:100%;background:#0d0d10;color:#fff;border:1px solid #555;border-radius:8px;padding:5px';i.onkeydown=e=>{if(e.key=='Enter'){ws.send(JSON.stringify({typ:'odpowiedz',id:m.id,wynik:{answer:i.value}}));pqZamknij(String(m.id));c.remove()}};bt.appendChild(i)}
  $('pr').appendChild(c);scr()}
 let atts=[];
-function drawAtt(){$('catt').innerHTML=atts.map((a,i)=>`<span class="at ${a.err?'er':a.path?'ok':''}">${a.thumb?`<img src="${a.thumb}" alt="">`:''}${a.err?'✗':a.path?'✓':'…'} ${esc(a.name)}<b class="atx" data-i="${i}" title="usuń załącznik">✕</b></span>`).join('');
+function drawAtt(){$('catt').innerHTML=atts.map((a,i)=>`<span class="at ${a.err?'er':a.path?'ok':''}">${a.thumb?`<img src="${a.thumb}" alt="">`:''}${a.err?'✗':a.path?'✓':'…'} ${esc(a.name)}<b class="atx" data-i="${i}" title="${t('rm_att')}">✕</b></span>`).join('');
  $('catt').querySelectorAll('.atx').forEach(x=>x.onclick=e=>{e.preventDefault();e.stopPropagation();const a=atts[+x.dataset.i];if(a&&a.thumb)URL.revokeObjectURL(a.thumb);atts.splice(+x.dataset.i,1);drawAtt()})}
 function addFiles(fs){for(const f of fs){const a={name:f.name,path:null,err:0,type:f.type,thumb:/^image\//.test(f.type)?URL.createObjectURL(f):''};atts.push(a);drawAtt();
   const fd=new FormData();fd.append('plik',f,f.name);
   fetch('/api/plik',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{if(d.sciezka){a.path=d.sciezka;a.name=d.nazwa}else a.err=1}).catch(()=>a.err=1).finally(drawAtt)}}
 $('cclip').onclick=()=>$('cfile').click();
 $('cfile').onchange=e=>{addFiles(e.target.files);e.target.value=''};
-chat.addEventListener('paste',e=>{const fs=[...(e.clipboardData?.files||[])];if(fs.length){e.preventDefault();addFiles(fs.map((f,i)=>f.name&&f.name!='image.png'?f:new File([f],'wklejony-'+Date.now()+'-'+i+'.png',{type:f.type})))}});
+chat.addEventListener('paste',e=>{const fs=[...(e.clipboardData?.files||[])];if(fs.length){e.preventDefault();addFiles(fs.map((f,i)=>f.name&&f.name!='image.png'?f:new File([f],t('pasted')+'-'+Date.now()+'-'+i+'.png',{type:f.type})))}});
 chat.addEventListener('dragover',e=>{if(e.dataTransfer?.types.includes('Files')){e.preventDefault();chat.classList.add('drag')}});
 chat.addEventListener('dragleave',()=>chat.classList.remove('drag'));
 chat.addEventListener('drop',e=>{e.preventDefault();chat.classList.remove('drag');addFiles(e.dataTransfer.files)});
@@ -514,68 +608,70 @@ const mob=()=>matchMedia('(max-width:760px)').matches;
 if(localStorage.getItem('mozg-zw')=='1')document.documentElement.classList.add('zw');
 $('sidebtn').onclick=()=>{const h=document.documentElement;if(mob()){h.classList.toggle('mob-side')}else{h.classList.toggle('zw');localStorage.setItem('mozg-zw',h.classList.contains('zw')?'1':'0')}upd()};
 function upd(){const h=document.documentElement;$('sidebtn').textContent=(mob()?h.classList.contains('mob-side'):!h.classList.contains('zw'))?'✕ Panel':'☰ Panel';setTimeout(rs,380)}
-async function api(p,b){const r=await fetch(p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'serwer: '+r.status);return j}
+async function api(p,b){const r=await fetch(p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||t('server_err')+r.status);return j}
 const dzis=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const dniOd=(a,b)=>Math.round((+new Date(a+'T12:00')-+new Date(b+'T12:00'))/864e5);
-function dzien(iso,d0){if(!iso)return'';const n=dniOd(iso,d0);if(n==0)return'Dziś';if(n==1)return'Jutro';if(n==2)return'Pojutrze';if(n==-1)return'1 dzień po terminie';if(n<0)return(-n)+' dni po terminie';return new Date(iso+'T12:00').toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'})}
+function dzien(iso,d0){if(!iso)return'';const n=dniOd(iso,d0);if(n==0)return t('today');if(n==1)return t('tomorrow');if(n==2)return t('day2');if(n==-1)return t('overdue1');if(n<0)return t('overdue',-n);return new Date(iso+'T12:00').toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long'})}
 const linki=s=>esc(s).replace(/(https?:\/\/[^\s<]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u.length>40?u.slice(0,38)+'…':u}</a>`);
-const PRIO=[['1','cito','Cito','#ef4444'],['2','wysoki','Wysoki','#f59e0b'],['3','sredni','Średni','#d4af37'],['4','niski','Niski','#4da3ff'],['5','czeka','Najniższy / czeka','#8a8a8a'],['/','wtoku','W toku','#22c55e'],[' ','','Bez priorytetu','#9fd68a']];
+const PRIO=[['1','cito','','#ef4444'],['2','wysoki','','#f59e0b'],['3','sredni','','#d4af37'],['4','niski','','#4da3ff'],['5','czeka','','#8a8a8a'],['/','wtoku','','#22c55e'],[' ','','','#9fd68a']];
+const prioName=p=>t('prio_'+(p[1]||'none'));
 const kolSt=s=>(PRIO.find(p=>p[1]==s||p[0]==s)||PRIO[6])[3];
 const WAGI=[['🔺','Highest'],['⏫','High'],['🔼','Medium'],['','Normal'],['🔽','Low'],['⏬','Lowest']];
 let pop=null;document.addEventListener('pointerdown',e=>{if(pop&&!pop.contains(e.target)){pop.remove();pop=null}});
 function menu(ev,z){ev.stopPropagation();if(pop)pop.remove();pop=document.createElement('div');pop.className='pop';
-  pop.innerHTML=PRIO.map(p=>`<div data-st="${p[0]}"><span class="k" style="background:${p[3]}"></span>${p[2]}</div>`).join('')+'<div class="w">'+WAGI.map(w=>`<span data-w="${w[0]}" title="${w[1]}">${w[0]||'—'}</span>`).join('')+'</div><div style="cursor:default;display:block">Przenieś na:<input type="date" value="'+(z.data||'')+'"></div>';
+  pop.innerHTML=PRIO.map(p=>`<div data-st="${p[0]}"><span class="k" style="background:${p[3]}"></span>${prioName(p)}</div>`).join('')+'<div class="w">'+WAGI.map(w=>`<span data-w="${w[0]}" title="${w[1]}">${w[0]||'—'}</span>`).join('')+'</div><div style="cursor:default;display:block">'+t('move_to')+'<input type="date" value="'+(z.data||'')+'"></div>';
   document.body.appendChild(pop);const r=ev.target.getBoundingClientRect();pop.style.left=Math.max(8,Math.min(innerWidth-220,r.left-180))+'px';pop.style.top=Math.max(8,Math.min(innerHeight-pop.offsetHeight-10,r.bottom+4))+'px';
-  const base={plik:z.plik,nr:z.nr,linia:z.linia},done=p=>p.then(loadZad).catch(e=>alert('Nie zapisałem: '+e.message));
+  const base={plik:z.plik,nr:z.nr,linia:z.linia},done=p=>p.then(loadZad).catch(e=>alert(t('save_fail')+e.message));
   pop.querySelectorAll('[data-st]').forEach(d=>d.onclick=()=>{done(api('/api/zadania/priorytet',{...base,status:d.dataset.st}));pop.remove();pop=null});
   pop.querySelectorAll('[data-w]').forEach(d=>d.onclick=()=>{done(api('/api/zadania/waga',{...base,waga:d.dataset.w}));pop.remove();pop=null});
   pop.querySelector('input').onchange=e=>{done(api('/api/zadania/termin',{...base,data:e.target.value}));pop.remove();pop=null}}
 function wiersz(z,opts){const d=document.createElement('div');d.className='row'+(opts.done?' done':'');d.style.setProperty('--k',opts.kol||'#9fd68a');
-  d.innerHTML=`<button class="kul" title="odhacz"></button><div class="tx">${(z.waga?z.waga+' ':'')+linki(z.tekst)}${opts.meta?`<div class="mt">${opts.meta}</div>`:''}</div>`+(opts.menu?'<button class="men" title="priorytet i termin">⋯</button>':'');
-  d.querySelector('.kul').onclick=()=>{d.classList.add(opts.toggle?'done':'gone');opts.klik().catch(e=>{alert('Nie wyszło: '+e.message);d.classList.remove('gone','done')})};
+  d.innerHTML=`<button class="kul" title="${t('tick')}"></button><div class="tx">${(z.waga?z.waga+' ':'')+linki(z.tekst)}${opts.meta?`<div class="mt">${opts.meta}</div>`:''}</div>`+(opts.menu?'<button class="men" title="'+t('prio_term')+'">⋯</button>':'');
+  d.querySelector('.kul').onclick=()=>{d.classList.add(opts.toggle?'done':'gone');opts.klik().catch(e=>{alert(t('done_fail')+e.message);d.classList.remove('gone','done')})};
   if(opts.menu)d.querySelector('.men').onclick=e=>menu(e,z);return d}
 const hd=(t,n)=>{const h=document.createElement('div');h.className='hd';h.innerHTML=esc(t)+(n!=null?`<span class="c">${n}</span>`:'');return h};
 async function loadZad(){const P=$('p-zad');
   const [z,hm]=await Promise.all([api('/api/zadania').catch(()=>null),api('/api/harmonogram').catch(()=>null)]);
   P.innerHTML='';const d0=(z&&z.data)||dzis();
   const odh=x=>api('/api/zadania/odhacz',{plik:x.plik,nr:x.nr,linia:x.linia}).then(()=>setTimeout(loadZad,600));
-  const dz=(z&&z.dzis)||[];P.appendChild(hd('Na dziś',dz.length));
-  if(!z)P.insertAdjacentHTML('beforeend','<div class="pusto">Nie mogę pobrać zadań</div>');else if(!dz.length)P.insertAdjacentHTML('beforeend','<div class="pusto">Czysto na dziś 🐉</div>');
-  dz.forEach(x=>P.appendChild(wiersz(x,{kol:kolSt(x.status),menu:1,meta:x.data&&x.data!=d0?dzien(x.data,d0):(x.cykl?'🔁 cykliczne':''),klik:()=>odh(x)})));
-  const ev=(hm&&hm.wydarzenia)||[];if(ev.length){const h0=(hm&&hm.dzis)||d0;P.appendChild(hd('Harmonogram',ev.length));let ost=null;
+  const dz=(z&&z.dzis)||[];P.appendChild(hd(t('hd_today'),dz.length));
+  if(!z)P.insertAdjacentHTML('beforeend','<div class="pusto">'+t('tasks_err')+'</div>');else if(!dz.length)P.insertAdjacentHTML('beforeend','<div class="pusto">'+t('tasks_empty')+'</div>');
+  dz.forEach(x=>P.appendChild(wiersz(x,{kol:kolSt(x.status),menu:1,meta:x.data&&x.data!=d0?dzien(x.data,d0):(x.cykl?t('recurring'):''),klik:()=>odh(x)})));
+  const ev=(hm&&hm.wydarzenia)||[];if(ev.length){const h0=(hm&&hm.dzis)||d0;P.appendChild(hd(t('hd_sched'),ev.length));let ost=null;
     ev.forEach(e=>{if(e.data!=ost){ost=e.data;const g=document.createElement('div');g.className='dz';g.textContent=dzien(e.data,h0);P.appendChild(g)}
-      P.insertAdjacentHTML('beforeend',`<div class="ev"><span class="g">${e.caly?'cały dzień':esc(e.od)+(e.do?'–'+esc(e.do):'')}</span><span>${esc(e.tytul)}${e.miejsce?`<div style="color:var(--mut);font-size:10.5px">📍 ${esc(e.miejsce)}</div>`:''}</span></div>`)})}
-  const pr=(z&&z.przyszle)||[];if(pr.length){P.appendChild(hd('Na przyszłość',pr.length));let last=null;
+      P.insertAdjacentHTML('beforeend',`<div class="ev"><span class="g">${e.caly?t('allday'):esc(e.od)+(e.do?'–'+esc(e.do):'')}</span><span>${esc(e.tytul)}${e.miejsce?`<div style="color:var(--mut);font-size:10.5px">📍 ${esc(e.miejsce)}</div>`:''}</span></div>`)})}
+  const pr=(z&&z.przyszle)||[];if(pr.length){P.appendChild(hd(t('hd_future'),pr.length));let last=null;
     pr.forEach(x=>{if(x.data!=last){last=x.data;const g=document.createElement('div');g.className='dz';g.textContent=dzien(x.data,d0);P.appendChild(g)}P.appendChild(wiersz(x,{kol:kolSt(x.status),menu:1,klik:()=>odh(x)}))})}
   const n=$('n-zad');n.hidden=!dz.length;n.textContent=dz.length}
-async function loadPam(){const P=$('p-pam');let pm;try{pm=await api('/api/pamiec')}catch(e){P.innerHTML='<div class="pusto">Nie mogę pobrać pamięci</div>';return}
-  const poz=pm.pozycje||[];P.innerHTML='';P.appendChild(hd('Pamięć',poz.length));
-  if(!poz.length)P.insertAdjacentHTML('beforeend','<div class="pusto">Pusto — dopisz „#pamięć” do zadania w Obsidianie</div>');
+async function loadPam(){const P=$('p-pam');let pm;try{pm=await api('/api/pamiec')}catch(e){P.innerHTML='<div class="pusto">'+t('mem_err')+'</div>';return}
+  const poz=pm.pozycje||[];P.innerHTML='';P.appendChild(hd(t('hd_mem'),poz.length));
+  if(!poz.length)P.insertAdjacentHTML('beforeend','<div class="pusto">'+t('mem_empty')+'</div>');
   poz.forEach(x=>P.appendChild(wiersz(x,{kol:'#ff6fb5',meta:x.waga||'',klik:()=>api('/api/zadania/odhacz',{plik:x.plik,nr:x.nr,linia:x.linia}).then(()=>setTimeout(loadPam,600))})));
   const n=$('n-pam');n.hidden=!poz.length;n.textContent=poz.length}
-async function loadZak(){const L=$('zakl');let d;try{d=await api('/api/zakupy')}catch(e){L.innerHTML='<div class="pusto">Nie mogę pobrać zakupów</div>';return}
+async function loadZak(){const L=$('zakl');let d;try{d=await api('/api/zakupy')}catch(e){L.innerHTML='<div class="pusto">'+t('shop_err')+'</div>';return}
   const p=d.pozycje||[],dk=p.filter(x=>!x.kupione),k=p.filter(x=>x.kupione);L.innerHTML='';
   const tg=x=>api('/api/zakupy/odhacz',{nr:x.nr,linia:x.linia}).then(()=>setTimeout(loadZak,400));
-  L.appendChild(hd('Do kupienia',dk.length));if(!dk.length)L.insertAdjacentHTML('beforeend','<div class="pusto">Lista pusta</div>');
+  L.appendChild(hd(t('hd_buy'),dk.length));if(!dk.length)L.insertAdjacentHTML('beforeend','<div class="pusto">'+t('shop_empty')+'</div>');
   dk.forEach(x=>L.appendChild(wiersz(x,{kol:'#ff9f1c',toggle:1,klik:()=>tg(x)})));
-  if(k.length){L.appendChild(hd('Kupione',k.length));k.forEach(x=>L.appendChild(wiersz(x,{kol:'#9fd68a',done:1,toggle:1,klik:()=>tg(x)})))}
+  if(k.length){L.appendChild(hd(t('hd_bought'),k.length));k.forEach(x=>L.appendChild(wiersz(x,{kol:'#9fd68a',done:1,toggle:1,klik:()=>tg(x)})))}
   const n=$('n-zak');n.hidden=!dk.length;n.textContent=dk.length}
-$('zakf').onsubmit=async e=>{e.preventDefault();const v=$('zaki').value.trim();if(!v)return;try{const r=await api('/api/zakupy/dodaj',{tresc:v});if(r.byly&&r.byly.length)alert('Już na liście: '+r.byly.join(', '));$('zaki').value='';loadZak()}catch(err){alert('Nie dodałem: '+err.message)}};
-async function loadSpo(){const P=$('p-spo');let d;try{d=await api('/api/spotkania')}catch(e){P.innerHTML='<div class="pusto">Nie mogę pobrać spotkań</div>';return}
-  const s=(d.spotkania||[]);P.innerHTML='';P.appendChild(hd('Spotkania',s.length));if(!s.length)P.insertAdjacentHTML('beforeend','<div class="pusto">Brak spotkań</div>');
+$('zakf').onsubmit=async e=>{e.preventDefault();const v=$('zaki').value.trim();if(!v)return;try{const r=await api('/api/zakupy/dodaj',{tresc:v});if(r.byly&&r.byly.length)alert(t('already')+r.byly.join(', '));$('zaki').value='';loadZak()}catch(err){alert(t('add_fail')+err.message)}};
+async function loadSpo(){const P=$('p-spo');let d;try{d=await api('/api/spotkania')}catch(e){P.innerHTML='<div class="pusto">'+t('meet_err')+'</div>';return}
+  const s=(d.spotkania||[]);P.innerHTML='';P.appendChild(hd(t('hd_meet'),s.length));if(!s.length)P.insertAdjacentHTML('beforeend','<div class="pusto">'+t('meet_empty')+'</div>');
   s.forEach(sp=>{const c=document.createElement('div');c.className='spot';const zz=sp.zadania||[];const ot=zz.filter(z=>!z.zrobione).length;
-    c.innerHTML=`<h4>${esc(sp.nazwa||sp.tytul||sp.plik)}</h4><div class="mt">${esc(sp.data||'')} · ${ot} otwartych z ${zz.length}</div>`;
+    c.innerHTML=`<h4>${esc(sp.nazwa||sp.tytul||sp.plik)}</h4><div class="mt">${esc(sp.data||'')} · ${t('open_of',ot,zz.length)}</div>`;
     zz.forEach(z=>c.appendChild(wiersz(z,{kol:z.zrobione?'#9fd68a':'#d4af37',done:z.zrobione,toggle:1,klik:()=>api('/api/spotkania/odhacz',{plik:sp.plik,nr:z.nr,linia:z.linia}).then(()=>setTimeout(loadSpo,400))})));P.appendChild(c)})}
 let kodIds=new Set(),kodT=0,otwarte=new Set();
 function kodPing(){if(tab=='kod'){clearTimeout(kodT);kodT=setTimeout(loadKod,900)}}
-function kolor(k,r){const l=esc(k).split('\n');if(r=='zmiana'){let tr=0;return l.map(x=>{if(x=='--- było'){tr=-1;return'<span class="dh">'+x+'</span>'}if(x=='+++ jest'){tr=1;return'<span class="dh">'+x+'</span>'}return`<span class="${tr<0?'dm':tr>0?'dp':''}">${x||' '}</span>`}).join('')}
+const kindName=r=>{const m={zmiana:'change','nowy plik':'new file'};return t('kind_'+(m[r]||r))};
+function kolor(k,r){const l=esc(k).split('\n');if(r=='change'||r=='zmiana'){let tr=0;return l.map(x=>{if(x=='--- było'||x=='--- old'){tr=-1;return'<span class="dh">--- '+t('diff_old')+'</span>'}if(x=='+++ jest'||x=='+++ new'){tr=1;return'<span class="dh">+++ '+t('diff_new')+'</span>'}return`<span class="${tr<0?'dm':tr>0?'dp':''}">${x||' '}</span>`}).join('')}
   return l.map(x=>`<span>${x||' '}</span>`).join('')}
-async function loadKod(){let d;try{d=await api('/api/kod')}catch(e){$('kodl').innerHTML='<div class="pusto">Nie mogę pobrać kodu</div>';return}
+async function loadKod(){let d;try{d=await api('/api/kod')}catch(e){$('kodl').innerHTML='<div class="pusto">'+t('code_err')+'</div>';return}
   const L=$('kodl');const first=!kodIds.size;L.querySelectorAll('details').forEach(x=>{if(x.open)otwarte.add(x.dataset.id);else otwarte.delete(x.dataset.id)});
-  L.innerHTML=d.length?'':'<div class="pusto">Przez ostatnie 2 godziny żaden agent nie pisał kodu</div>';
+  L.innerHTML=d.length?'':'<div class="pusto">'+t('code_empty')+'</div>';
   d.forEach((k,i)=>{const nw=!first&&!kodIds.has(k.id);const e=document.createElement('details');e.className='kod'+(nw?' nowy':'');e.dataset.id=k.id;
     if(otwarte.has(k.id)||(i==0&&(first||nw)))e.open=true;
-    e.innerHTML=`<summary><span class="tg ${k.rodzaj=='terminal'?'terminal':k.rodzaj=='zmiana'?'zmiana':k.rodzaj=='python'?'python':''}">${esc(k.rodzaj)}</span><span class="pl" title="${esc(k.plik)}">${esc(k.plik)}</span><span class="cz" style="color:${agc(k.agent)}">${esc(k.agent)}</span><span class="cz">${new Date(k.t*1000).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'})}</span></summary><pre>${kolor(k.kod,k.rodzaj)}</pre>`;
+    e.innerHTML=`<summary><span class="tg ${k.rodzaj=='terminal'?'terminal':(k.rodzaj=='change'||k.rodzaj=='zmiana')?'change':k.rodzaj=='python'?'python':''}">${esc(kindName(k.rodzaj))}</span><span class="pl" title="${esc(k.plik)}">${esc(k.plik)}</span><span class="cz" style="color:${agc(k.agent)}">${esc(k.agent)}</span><span class="cz">${new Date(k.t*1000).toLocaleTimeString(LOC,{hour:'2-digit',minute:'2-digit'})}</span></summary><pre>${kolor(k.kod,k.rodzaj)}</pre>`;
     L.appendChild(e)});kodIds=new Set(d.map(k=>k.id))}
 setInterval(()=>{if(tab=='kod')loadKod()},5000);
 setInterval(()=>{if(tab=='zad')loadZad();else if(tab=='pam')loadPam();else if(tab=='zak')loadZak();else if(tab=='spo')loadSpo()},60000);

@@ -1,0 +1,43 @@
+[
+ {
+  "rola": "user",
+  "tekst": "What should I do in the garden today?",
+  "sesja": "d1",
+  "czas": "{t-12}"
+ },
+ {
+  "rola": "assistant",
+  "tekst": "",
+  "sesja": "d1",
+  "czas": "{t-11}",
+  "narzedzia": [
+   {
+    "nazwa": "skill_view"
+   },
+   {
+    "nazwa": "read_file"
+   },
+   {
+    "nazwa": "web_search"
+   }
+  ]
+ },
+ {
+  "rola": "assistant",
+  "tekst": "**In the garden today:**\n- water the tomatoes in the morning\n- pick the ripe fruit\n- rain is forecast for tomorrow, so skip the evening watering",
+  "sesja": "d1",
+  "czas": "{t-11}"
+ },
+ {
+  "rola": "user",
+  "tekst": "Thanks! Add lentils to the shopping list.",
+  "sesja": "d1",
+  "czas": "{t-3}"
+ },
+ {
+  "rola": "assistant",
+  "tekst": "Added 🛒 — there are now 3 items on the list.",
+  "sesja": "d1",
+  "czas": "{t-3}"
+ }
+]

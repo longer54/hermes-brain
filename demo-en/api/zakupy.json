@@ -1,0 +1,28 @@
+{
+ "pozycje": [
+  {
+   "tekst": "Red lentils",
+   "kupione": false,
+   "nr": 1,
+   "linia": ""
+  },
+  {
+   "tekst": "Cumin",
+   "kupione": false,
+   "nr": 2,
+   "linia": ""
+  },
+  {
+   "tekst": "Canned tomatoes",
+   "kupione": false,
+   "nr": 3,
+   "linia": ""
+  },
+  {
+   "tekst": "Coffee beans",
+   "kupione": true,
+   "nr": 4,
+   "linia": ""
+  }
+ ]
+}

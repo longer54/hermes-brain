@@ -1,0 +1,23 @@
+{
+ "spotkania": [
+  {
+   "nazwa": "Lighthouse planning",
+   "data": "{d-2}",
+   "plik": "demo",
+   "zadania": [
+    {
+     "tekst": "Add dark mode",
+     "zrobione": true,
+     "nr": 1,
+     "linia": ""
+    },
+    {
+     "tekst": "Wire up the contact form",
+     "zrobione": false,
+     "nr": 2,
+     "linia": ""
+    }
+   ]
+  }
+ ]
+}

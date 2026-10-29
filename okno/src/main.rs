@@ -8,6 +8,7 @@
 //! - serwer nie odpowiada → ponawia co 3 s.
 //!
 //! Adres serwera: zmienna środowiskowa `MOZG_ADRES` (np. `http://127.0.0.1:8110`).
+//! Język napisów okna: `MOZG_LANG=en|pl` albo locale systemu (pl* → polski, reszta → angielski).
 //! `mozg-okno --instaluj` kładzie ikonę i wpis w menu (~/.local/share).
 use gtk::glib;
 use gtk::prelude::*;
@@ -48,6 +49,25 @@ fn serwer() -> &'static str {
     S.get_or_init(|| std::env::var("MOZG_ADRES").unwrap_or_else(|_| "http://127.0.0.1:8110".into()))
 }
 
+/// Language of the window texts: `MOZG_LANG` (en|pl), else the locale (`LC_ALL`/`LC_MESSAGES`/`LANG`); default English.
+fn jezyk_pl() -> bool {
+    let v = std::env::var("MOZG_LANG")
+        .or_else(|_| std::env::var("LC_ALL"))
+        .or_else(|_| std::env::var("LC_MESSAGES"))
+        .or_else(|_| std::env::var("LANG"))
+        .unwrap_or_default()
+        .to_lowercase();
+    v.starts_with("pl")
+}
+
+fn tytul() -> &'static str {
+    if jezyk_pl() { "Mózg Hermesa" } else { "Hermes Brain" }
+}
+
+fn opis() -> &'static str {
+    if jezyk_pl() { "Na żywo: co robią agenci Hermesa" } else { "Live: what your Hermes agents are doing" }
+}
+
 const IKONY: [(u32, &[u8]); 8] = [
     (16, include_bytes!("../ikona/mozg-16.png")),
     (22, include_bytes!("../ikona/mozg-22.png")),
@@ -70,7 +90,7 @@ fn instaluj() -> std::io::Result<()> {
     let apps = dane.join("applications");
     std::fs::create_dir_all(&apps)?;
     for (plik, nazwa, opis, arg, id) in [
-        ("mozg-hermesa.desktop", "Mózg Hermesa", "Na żywo: co robią agenci Hermesa", "", "io.github.longer54.MozgHermesa"),
+        ("mozg-hermesa.desktop", tytul(), opis(), "", "io.github.longer54.MozgHermesa"),
     ] {
         let wpis = format!(
             "[Desktop Entry]\nType=Application\nName={nazwa}\nComment={opis}\n\
@@ -109,7 +129,10 @@ fn build_window(app: &gtk::Application) -> gtk::ApplicationWindow {
         }
         false
     });
-    webview.load_uri(&format!("{}/", serwer()));
+    match std::env::var("MOZG_LANG") {
+        Ok(l) if l == "en" || l == "pl" => webview.load_uri(&format!("{}/?lang={}", serwer(), l)),
+        _ => webview.load_uri(&format!("{}/", serwer())),
+    }
 
     webview.connect_load_failed(move |wv, _ev: LoadEvent, uri, _err| {
         if !uri.starts_with(serwer()) {
@@ -138,7 +161,7 @@ fn build_window(app: &gtk::Application) -> gtk::ApplicationWindow {
     });
 
     let window = gtk::ApplicationWindow::new(app);
-    window.set_title("Mózg Hermesa");
+    window.set_title(tytul());
     window.set_icon_name(Some("mozg-hermesa"));
     window.set_default_size(1400, 900);
     let pasek = gtk::Box::new(gtk::Orientation::Horizontal, 0);

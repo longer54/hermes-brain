@@ -8,6 +8,7 @@ __pycache__/
 .env.*
 config.json
 !demo/config.json
+!demo-en/config.json
 # runtime data
 *.db
 *.db-*

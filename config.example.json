@@ -3,13 +3,14 @@
   "vault": "~/Obsidian/Vault",
   "host": "127.0.0.1",
   "port": 8110,
+  "language": "auto",
   "backend": "",
   "agents": {
     "": "Hermes",
     "research": "Research"
   },
   "private_folders": [
-    "Dziennik"
+    "Journal"
   ],
   "services": [
     {
@@ -32,7 +33,7 @@
   "hosts": [
     {
       "id": "x_server",
-      "label": "Mój serwer",
+      "label": "My server",
       "match": "\\bmy-server\\b"
     }
   ]

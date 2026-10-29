@@ -4,7 +4,7 @@
 
 Wizualizacja „mózgu” agentów [Hermes](https://github.com/NousResearch) na żywo: każde zapytanie, myślenie modelu, użycie narzędzia, skilla, pamięci czy notatki z Obsidiana zapala ścieżkę w sieci neuronów. Obok czat z agentem i panel zadań.
 
-![Zrzut ekranu (dane demo)](docs/screenshot.png)
+![Zrzut ekranu (dane demo)](docs/screenshot-pl.png)
 
 *Zrzut z trybu demo — wszystkie dane są zmyślone.*
 
@@ -17,7 +17,7 @@ Wizualizacja „mózgu” agentów [Hermes](https://github.com/NousResearch) na 
 - **Panel boczny** (opcjonalny backend) — czat, zadania, harmonogram, zakupy, spotkania.
 - **Prywatność** — wybrane foldery vaulta pokazywane bez tytułów notatek; serwer domyślnie słucha tylko na `127.0.0.1`.
 - **Okno natywne** (`okno/`, Rust + WebKitGTK) — opcjonalne okno bez belki z ikoną i wpisem w menu.
-- **Tryb demo** — zmyślone notatki, sesje i skille w `demo/`, żeby zobaczyć działanie bez własnego Hermesa.
+- **Tryb demo** — zmyślone notatki, sesje i skille w `demo/` (PL) i `demo-en/` (EN), żeby zobaczyć działanie bez własnego Hermesa.
 
 ## Wymagania
 
@@ -34,6 +34,7 @@ cd hermes-brain
 
 # demo (zmyślone dane, nic nie musisz mieć)
 python3 server/server.py --demo        # albo: MOZG_DEMO=1 python3 server/server.py
+python3 server/server.py --demo --lang en   # angielskie dane demo (domyślnie wg locale systemu)
 # → http://127.0.0.1:8110/
 
 # z własnym Hermesem
@@ -59,6 +60,7 @@ Kolejność: zmienne środowiskowe > plik konfiguracyjny > domyślne. Plik: `$MO
 | `vault` / `MOZG_VAULT` | `~/Obsidian/Vault` | vault Obsidiana |
 | `host` / `MOZG_HOST` | `127.0.0.1` | adres nasłuchu |
 | `port` / `MOZG_PORT` | `8110` | port |
+| `language` / `MOZG_LANG` / `--lang` | `auto` | język interfejsu: `auto` (język przeglądarki), `en` lub `pl`; wybiera też zestaw danych demo |
 | `backend` / `MOZG_BACKEND` | puste | opcjonalny backend czatu/zadań (`host:port`); puste = czat i listy wyłączone |
 | `agents` | auto | profil → nazwa wyświetlana (`""` = profil główny) |
 | `private_folders` | `[]` | foldery vaulta bez tytułów notatek |
@@ -70,7 +72,7 @@ Serwer otwiera bazy Hermesa wyłącznie w trybie tylko-do-odczytu. Nie wystawiaj
 
 ## Stan / plany
 
-Interfejs jest obecnie po polsku; planowany jest interfejs angielski.
+Interfejs jest dostępny po angielsku i po polsku. Kolejność wyboru języka: `?lang=en|pl` w adresie, przełącznik PL/EN w UI (zapamiętany w przeglądarce), klucz `language` w configu (`MOZG_LANG`), potem język przeglądarki (polski → `pl`, reszta → `en`). Zrzut po polsku: `docs/screenshot-pl.png`.
 
 ## Zastrzeżenia
 
